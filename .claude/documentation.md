@@ -1,20 +1,59 @@
 # Architecture du frontend Angular — Mini-CRM
 
-Ce document décrit l'architecture retenue pour le frontend Angular 21 du Mini-CRM : l'organisation des dossiers, le routage, et le rôle de chaque composant et de chaque service. Il sert de référence à l'agent codeur comme aux développeurs.
+Ce document décrit l'architecture retenue pour le frontend Angular 22 du Mini-CRM : l'organisation des dossiers, le routage, et le rôle de chaque composant et de chaque service. Il sert de référence à l'agent codeur comme aux développeurs.
+
+Il décrit l'architecture **cible**. Ce qui est déjà créé dans le code est indiqué en section 10. Les endpoints et modèles de l'API sont dans `endpoints-et-donnees.md`.
 
 ---
 
 ## 1. Principes
 
-- **Organisation par feature.** Chaque domaine métier (`auth`, `entreprises`, `contacts`, `opportunites`) a son propre dossier. Le code transverse est dans `layout/` et `shared/`.
+- **Découpage par métier.** Chaque domaine métier (`auth`, `entreprises`, `contacts`, `opportunites`) a son propre dossier. Un service ou un modèle vit dans le dossier de **son** domaine, même si d'autres features l'utilisent : il ne déménage jamais dans `shared/` pour cette raison.
+- **`shared/` ne connaît aucun métier.** On n'y met que du générique (tableau, modale, pagination…), qui ne sait pas ce qu'est une entreprise ou une opportunité. Le code transverse lié à la mise en page est dans `layout/`.
 - **Trois dossiers par feature :**
-  - `data-access/` : le service qui appelle l'API et porte l'état de la feature ;
+  - `data-access/` : le service qui appelle l'API et porte l'état du domaine, et les modèles du domaine ;
   - `smart-components/` : les pages routées, qui lisent l'état et orchestrent ;
-  - `dumb-components/` : les composants d'affichage, qui ne reçoivent que des `input()` et n'émettent que des `output()`. Aucun accès au service, aucun appel HTTP.
-- **Un smart component par page.** Il est le seul à injecter le service de sa feature. Il passe les données aux dumb components et réagit à leurs événements.
+  - `dump-components/` (composants « dumb » ; le dossier s'écrit `dump` dans le projet) : les composants d'affichage, qui ne reçoivent que des `input()` et n'émettent que des `output()`. Aucun accès au service, aucun appel HTTP.
+- **Un smart component par page.** Seuls les smart components injectent des services : celui de leur feature, celui d'une autre feature ou celui de `shared/`. Ils croisent les données de plusieurs domaines si besoin (ex. : nombre d'opportunités par entreprise, voir 1.1), les passent aux dumb components et réagissent à leurs événements.
 - **Standalone, Signals, OnPush, zoneless.** Aucun `NgModule`. Contrôle de flux en `@if` / `@for` / `@switch`. Injection par `inject()`.
 - **Pas de composant sans comportement.** Un titre de page, un texte ou un simple conteneur se font en HTML avec des classes globales. Un composant n'est créé que s'il porte un comportement, ou un bloc réutilisé à plusieurs endroits.
 - **Réutilisation par contrat, pas par type.** Un composant de `shared/` ne connaît aucune entité métier : il ne sait pas ce qu'est une entreprise. Chaque page lui fournit ses données et, si besoin, ses templates.
+
+### 1.1 Règles de dépendance
+
+| Qui | Peut importer | Ne peut pas importer |
+|---|---|---|
+| `<feature>/smart-components` | `data-access` de sa feature **et des autres features**, ses propres dumb, `shared/`, `layout/` | les composants (smart ou dumb) d'une autre feature |
+| `<feature>/dump-components` | les modèles (interfaces) de sa feature ou d'une autre (ex. : `opportunite-form` reçoit des `Entreprise[]`), `shared/` | aucun service, ni router ni HTTP |
+| `<feature>/data-access` | `HttpClient`, ses propres modèles | le service d'une autre feature |
+| `shared/` | rien du métier | aucune feature |
+
+```
+entreprises/smart-components  ──►  opportunites/data-access   ✅ une page lit un autre domaine
+entreprises/data-access       ──►  opportunites/data-access   ❌ deux services liés entre eux
+shared/                       ──►  n'importe quelle feature    ❌ shared ne connaît pas le métier
+entreprises/smart-components  ──►  opportunites/dump-components ❌ casse le lazy loading
+```
+
+Comme un service ne dépend que de l'API, aucun cycle n'est possible. Le lazy loading reste efficace : le builder suit les `import`, pas les dossiers. Un service partagé par deux pages part dans un petit chunk commun, et les pages restent chacune dans leur chunk.
+
+Les services d'une feature ne sont **jamais fournis ni référencés dans `app.config.ts`** : ce fichier fait partie du bundle initial, et le service y serait chargé sur toutes les pages, `/connexion` comprise. `@Service()` suffit, car Angular le fournit à la demande.
+
+Exemple, le nombre d'opportunités par entreprise. L'API n'a pas d'endpoint dédié, mais chaque opportunité a un `entreprise_id`. `EntreprisesPage` injecte donc `EntreprisesService` et `OpportunitesService`, et compte avec un `computed()` :
+
+```ts
+protected readonly nbOpportunitesParEntreprise = computed(() => {
+  const compteur = new Map<number, number>();
+  for (const opportunite of this.opportunitesService.opportunites()) {
+    if (opportunite.entreprise_id !== null) {
+      compteur.set(opportunite.entreprise_id, (compteur.get(opportunite.entreprise_id) ?? 0) + 1);
+    }
+  }
+  return compteur;
+});
+```
+
+Ces règles correspondent aux contraintes de modules de Nx (`feature` → `data-access` autorisé, `data-access` → `data-access` interdit), vues en formation Angular avancé.
 
 ---
 
@@ -28,50 +67,50 @@ src/app/
 │
 ├─ auth/
 │  ├─ data-access/
-│  │  └─ auth.service.ts
+│  │  └─ auth-service.ts
 │  ├─ smart-components/
 │  │  └─ auth-page/
-│  ├─ dumb-components/
+│  ├─ dump-components/
 │  │  └─ auth-form/
 │  └─ auth.guard.ts             ← authGuard et guestGuard
 │
 ├─ entreprises/
 │  ├─ data-access/
-│  │  └─ entreprises.service.ts
+│  │  └─ entreprises-service.ts
 │  ├─ smart-components/
 │  │  └─ entreprises-page/
-│  └─ dumb-components/
+│  └─ dump-components/
 │     └─ entreprise-form/
 │
 ├─ contacts/
 │  ├─ data-access/
-│  │  └─ contacts.service.ts
+│  │  └─ contacts-service.ts
 │  ├─ smart-components/
 │  │  └─ contacts-page/
-│  └─ dumb-components/
+│  └─ dump-components/
 │     └─ contact-form/
 │
 ├─ opportunites/
 │  ├─ data-access/
-│  │  └─ opportunites.service.ts
+│  │  └─ opportunites-service.ts
 │  ├─ smart-components/
 │  │  ├─ opportunites-page/
 │  │  └─ opportunite-form-page/
-│  ├─ dumb-components/
+│  ├─ dump-components/
 │  │  └─ opportunite-form/
 │  └─ opportunites.routes.ts
 │
 ├─ layout/
 │  ├─ smart-components/
 │  │  └─ app-shell/
-│  └─ dumb-components/
+│  └─ dump-components/
 │     ├─ app-header/
 │     ├─ main-nav/
 │     ├─ user-badge/
 │     └─ logout-button/
 │
 └─ shared/
-   └─ dumb-components/
+   └─ dump-components/
       ├─ list-page-layout/
       ├─ split-layout/
       ├─ side-panel/
@@ -164,7 +203,7 @@ Au démarrage avec une adresse vide, le guard s'exécute **avant** l'affichage :
 
 | Élément | Type | Rôle |
 |---|---|---|
-| `auth.service.ts` | data-access | Connexion, inscription, déconnexion. Garde l'utilisateur courant et le jeton JWT. Expose `user()` et `isLogged()` en signals, utilisés par les guards et par `AppShell`. |
+| `auth-service.ts` | data-access | Connexion, inscription, déconnexion. Garde l'utilisateur courant et le jeton JWT. Expose `user()` et `isLogged()` en signals, utilisés par les guards et par `AppShell`. |
 | `auth-page` | smart | Page `/connexion`. Utilise `SplitLayout` : texte de présentation à gauche, formulaire à droite. Gère l'onglet actif (connexion ou inscription), appelle le service et redirige vers `/entreprises` après succès. |
 | `auth-form` | dumb | Un seul formulaire pour les deux cas, selon un input `mode` (`'signin'` ou `'signup'`). En inscription, il affiche en plus le nom et la confirmation du mot de passe, et active les règles de robustesse du mot de passe. Émet les valeurs saisies. |
 | `auth.guard.ts` | — | `authGuard` et `guestGuard`, voir 3.3. |
@@ -173,7 +212,7 @@ Au démarrage avec une adresse vide, le guard s'exécute **avant** l'affichage :
 
 | Élément | Type | Rôle |
 |---|---|---|
-| `entreprises.service.ts` | data-access | Liste, création et modification des entreprises (`GET`, `POST`, `PUT`). Porte la liste en état et les valeurs calculées pour les statistiques. |
+| `entreprises-service.ts` | data-access | Liste, création et modification des entreprises (`GET`, `POST`, `PUT`). Porte la liste en état et les valeurs calculées pour les statistiques. |
 | `entreprises-page` | smart | Page `/entreprises`. Utilise `ListPageLayout`. Gère la recherche, le filtre de statut, la page courante, et l'ouverture du `SidePanel` d'ajout ou de modification. |
 | `entreprise-form` | dumb | Formulaire d'une entreprise : nom, secteur, adresse, téléphone, statut (`Actif` / `Inactif` via `SegmentedControl`). Reçoit la valeur initiale, émet la valeur saisie. |
 
@@ -183,7 +222,7 @@ Le formulaire s'affiche dans un **panneau latéral** (`SidePanel`), sans changem
 
 | Élément | Type | Rôle |
 |---|---|---|
-| `contacts.service.ts` | data-access | Liste, création et modification des contacts. |
+| `contacts-service.ts` | data-access | Liste, création et modification des contacts. |
 | `contacts-page` | smart | Page `/contacts`. Même structure que la page Entreprises, mais le formulaire s'ouvre dans une **popup** (`Modal`). |
 | `contact-form` | dumb | Formulaire d'un contact : prénom, nom, e-mail, téléphone, entreprise de rattachement. |
 
@@ -191,7 +230,7 @@ Le formulaire s'affiche dans un **panneau latéral** (`SidePanel`), sans changem
 
 | Élément | Type | Rôle |
 |---|---|---|
-| `opportunites.service.ts` | data-access | Liste, création et modification des opportunités. Calcule le pipeline ouvert et le montant gagné. |
+| `opportunites-service.ts` | data-access | Liste, création et modification des opportunités. Calcule le pipeline ouvert et le montant gagné. |
 | `opportunites-page` | smart | Page `/opportunites`. Liste avec statistiques, recherche et filtre par statut. |
 | `opportunite-form-page` | smart | Pages `/opportunites/nouvelle` et `/opportunites/:id/modifier`. Reçoit `id` en input, distingue création et modification, gère le cas d'une opportunité introuvable, enregistre puis revient à la liste. |
 | `opportunite-form` | dumb | Formulaire d'une opportunité : intitulé, entreprise, contact (filtré selon l'entreprise choisie), montant, date de clôture, statut, notes. Ne sait pas s'il crée ou s'il modifie. |
@@ -277,43 +316,45 @@ Exemple d'utilisation :
 
 ---
 
-## 7. Point ouvert : service ou store
+## 7. Décisions et points ouverts
 
-Le schéma place un **service** dans chaque dossier `data-access/`. Or les règles actuelles du projet (`CLAUDE.md`, `frontend-CLAUDE.md`) imposent un **NgRx Signal Store par feature, sans service classique : le store porte l'état et le HTTP**.
+### 7.1 Décidé : des services, pas de store
 
-Les deux options :
-- **Garder la règle** : `data-access/` contient `entreprises.store.ts` au lieu de `entreprises.service.ts`, et les smart components injectent le store.
-- **Séparer** : le service fait les appels HTTP, le store porte l'état et appelle le service. Il faut alors mettre à jour les fichiers de règles que lit l'agent.
+Formation **Angular initiation** : chaque `data-access/` contient un **service** (`@Service()`) qui fait les appels HTTP et porte l'état en signals. Pas de NgRx, pas de Signal Store, pas de Nx. L'application sera transformée plus tard, dans la formation Angular avancé.
 
-Cette décision doit être tranchée avant la génération du code.
+### 7.2 À trancher : écarts entre ce document et l'API
+
+L'API (voir `endpoints-et-donnees.md`) ne fournit pas tout ce que ce document prévoit :
+
+| Prévu ici | Ce que fait l'API |
+|---|---|
+| `auth/` : connexion, inscription, JWT, guards (3.3, 4.1) | Aucun endpoint d'authentification, aucun jeton |
+| Entreprise : statut `Actif` / `Inactif` (4.2, filtres « Actives / Inactives ») | Pas de champ statut sur une entreprise |
+| Opportunité : date de clôture et notes (4.4) | Pas de date ; le champ `description` tient lieu de notes |
+| Opportunité : intitulé | Le champ s'appelle `titre` |
+
+Bootstrap (cité en 6.3) n'est pas installé dans le projet.
 
 ---
 
 ## 8. Le dossier `.claude/`
 
-En plus des fichiers de règles, le dossier `.claude/` à la racine du dépôt contient les documents de référence que l'agent consulte avant de coder :
+Le dossier `.claude/` à la racine du dépôt contient les documents que Claude Code charge au début de chaque conversation :
 
 ```
 .claude/
-├─ CLAUDE.md                       ← règles de codage du dépôt
-├─ architecture/
-│  └─ architecture-frontend.md     ← ce document
-├─ design/
-│  ├─ connexion.html               ← maquette de la page de connexion
-│  ├─ entreprises.html             ← liste et panneau latéral
-│  ├─ contacts.html                ← liste et popup
-│  ├─ opportunites.html            ← liste
-│  ├─ opportunite-form.html        ← page de formulaire
-│  └─ reperer-les-components.pdf   ← découpage en composants, slide par slide
-└─ support-de-cours/
-   └─ …                            ← guides et supports de la formation
+├─ CLAUDE.md                ← règles de codage ; importe les deux fichiers ci-dessous
+├─ documentation.md         ← ce document : architecture et composants
+└─ endpoints-et-donnees.md  ← endpoints de l'API, données envoyées et reçues
 ```
 
-- **`design/`** : les maquettes HTML, source de vérité pour le rendu attendu (couleurs, espacements, états, comportement mobile).
-- **`architecture/`** : ce document, source de vérité pour le découpage et le nommage.
-- **`support-de-cours/`** : les guides de la formation, pour que l'agent applique les mêmes conventions que celles enseignées.
+`CLAUDE.md` est lu automatiquement par Claude Code. Il importe les deux autres fichiers avec la syntaxe `@nom-du-fichier.md`, ce qui les charge aussi dès l'ouverture d'une conversation.
 
-L'agent lit ces trois sources avant de proposer un plan de tâches. En cas de contradiction entre une maquette et ce document, c'est ce document qui l'emporte pour la structure, et la maquette pour le rendu.
+Prévu au fil de la formation (pas encore créé) :
+- `design/` : les maquettes HTML, source de vérité pour le rendu (couleurs, espacements, états, mobile) ;
+- `support-de-cours/` : les slides et guides de la formation, pour que l'agent applique les conventions enseignées.
+
+En cas de contradiction entre une maquette et ce document, ce document l'emporte pour la structure, et la maquette pour le rendu.
 
 ---
 
@@ -333,7 +374,7 @@ Chaque outil lit son propre fichier :
 | Fichier | Lu par | Clé racine |
 |---|---|---|
 | `.vscode/mcp.json` | VS Code (mode agent de Copilot Chat) | `servers` |
-| `.mcp.json` (racine du dépôt) | Claude Code | `mcpServers` |
+| `.mcp.json` (racine du dépôt, **pas encore créé**) | Claude Code | `mcpServers` |
 
 ```json
 // .vscode/mcp.json
@@ -356,3 +397,26 @@ Chaque outil lit son propre fichier :
 - `-y` évite que `npx` attende une confirmation au premier téléchargement du paquet, ce qui bloquerait le démarrage du serveur.
 - `npx @angular/cli` utilise la version du CLI installée dans le projet, donc la même version d'Angular que l'appli.
 - Le serveur `playwright` télécharge un navigateur au premier lancement s'il n'y en a pas.
+
+---
+
+## 10. État d'avancement
+
+Mis à jour à chaque étape de la formation.
+
+### Étape 1 (branche `branche-1`) : squelette
+
+Composants et services générés, **encore vides** (pas d'input, d'output, de logique ni de template) :
+
+| Dossier | Créé |
+|---|---|
+| `auth/` | `auth-service`, `auth-page`, `auth-form` |
+| `entreprises/` | `entreprises-service`, `entreprises-page`, `entreprise-form` |
+| `contacts/` | `contacts-service`, `contacts-page`, `contact-form` |
+| `opportunites/` | `opportunites-service`, `opportunites-page`, `opportunite-form` |
+| `shared/dump-components/` | `avatar-initials`, `data-table`, `filter-chips`, `list-page-layout`, `modal`, `paginator`, `password-field`, `search-field`, `segmented-control`, `side-panel`, `split-layout`, `stat-card`, `status-badge` |
+
+Pas encore créé :
+- `layout/` (`app-shell`, `app-header`, `main-nav`, `user-badge`, `logout-button`) ;
+- `auth.guard.ts`, `opportunites.routes.ts`, `opportunite-form-page` ;
+- les routes : `app.routes.ts` est vide, et `withComponentInputBinding()` n'est pas encore dans `app.config.ts`.

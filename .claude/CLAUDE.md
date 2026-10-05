@@ -6,8 +6,16 @@ Réponds en français.
 
 ## Documents de référence
 
-- **`.claude/documentation.md`** : décrit l'architecture et tous les composants créés jusqu'ici, à quoi ils servent et comment ils sont utilisés dans l'appli. Lis-le avant de coder.
-- **Au fil de la formation**, on ajoute des slides au support de cours et on complète la documentation. Quand tu crées ou modifies un composant, un service, une route ou un guard, mets à jour `documentation.md` dans la même tâche.
+Ces deux fichiers sont importés ci-dessous et chargés à chaque conversation :
+
+- **`.claude/documentation.md`** : l'architecture et tous les composants créés jusqu'ici, à quoi ils servent et comment ils sont utilisés dans l'appli. Sa section « État d'avancement » dit ce qui existe déjà dans le code.
+- **`.claude/endpoints-et-donnees.md`** : les endpoints de l'API (`https://mini-crm-api-production-298d.up.railway.app`), les données à envoyer et les réponses. Les interfaces d'entités et les services doivent le respecter.
+
+Au fil de la formation, on ajoute des slides au support de cours et on complète la documentation. Quand tu crées ou modifies un composant, un service, une route ou un guard, mets à jour `documentation.md` (y compris « État d'avancement ») dans la même tâche. Si l'API évolue, mets à jour `endpoints-et-donnees.md`.
+
+@documentation.md
+
+@endpoints-et-donnees.md
 
 ## Périmètre de la formation
 
@@ -46,8 +54,12 @@ src/app/<feature>/
 
 Le dossier s'appelle `dump-components` (et non `dumb-`) dans le code : garde-le tel quel.
 
-- **Smart** (`*-page`) : seul composant à injecter le service de sa feature. Passe les données aux dumb et réagit à leurs événements.
+- **Découpage par métier** : un service ou un modèle vit dans le dossier de son domaine, même s'il est utilisé par d'autres features. Ne le déplace jamais dans `shared/` pour cette raison.
+- **`shared/`** : uniquement du générique, qui ne connaît aucune entité métier. N'importe aucune feature.
+- **Smart** (`*-page`) : seuls composants à injecter des services, ceux de leur feature, d'une autre feature ou de `shared/`. Croisent les données de plusieurs domaines si besoin, les passent aux dumb et réagissent à leurs événements.
 - **Dumb** : aucun service, aucun router, aucun HTTP. Reçoit via `input()`, émet via `output()`.
+- **Service** : n'injecte jamais le service d'une autre feature. Jamais fourni ni référencé dans `app.config.ts` (bundle initial) : `@Service()` suffit.
+- On n'importe jamais un composant (smart ou dumb) d'une autre feature. Règles complètes : `documentation.md`, section 1.1.
 - Pas de composant sans comportement : un titre ou un conteneur simple reste du HTML.
 
 ## Angular 22 : API à utiliser
