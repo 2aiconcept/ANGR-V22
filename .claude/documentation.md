@@ -293,7 +293,7 @@ Exemple d'utilisation :
       <p class="page-eyebrow">Portefeuille commercial</p>
       <h1 class="page-title">Entreprises</h1>
     </div>
-    <button appButton variant="primary" (click)="editing.set('new')">Nouvelle entreprise</button>
+    <button type="button" class="btn btn-primary" (click)="editing.set('new')">Nouvelle entreprise</button>
   </div>
   <div pageKpis> @for (s of stats(); track s.label) { <app-stat-card [label]="s.label" [value]="s.value" [color]="s.color" /> } </div>
   <div pageToolbar> <app-search-field … /> <app-filter-chips … /> </div>
@@ -328,7 +328,9 @@ Exemple d'utilisation :
 
 - **Les champs de formulaire simples** (texte, e-mail, liste déroulante, zone de texte) : des éléments HTML natifs, mis en forme par les classes Bootstrap et les classes globales de `styles.scss`.
 - **Le titre de page** : un `<p class="page-eyebrow">` et un `<h1 class="page-title">`.
-- **Les boutons d'action** : un élément `<button>` natif, mis en forme par une directive ou des classes (`primary`, `secondary`, `ghost`).
+- **Les boutons d'action** : un élément `<button>` natif avec les classes Bootstrap (`btn btn-primary`, `btn btn-outline-secondary`, `btn btn-link`).
+
+Règle générale : la mise en forme passe par les classes Bootstrap dans les templates. Le SCSS custom (global ou de composant) est réservé à ce que Bootstrap ne couvre pas.
 
 ---
 
@@ -349,7 +351,7 @@ L'API (voir `endpoints-et-donnees.md`) ne fournit pas tout ce que ce document pr
 | Opportunité : date de clôture et notes (4.4) | Pas de date ; le champ `description` tient lieu de notes |
 | Opportunité : intitulé | Le champ s'appelle `titre` |
 
-Bootstrap (cité en 6.3) n'est pas installé dans le projet.
+Bootstrap (cité en 6.3) est installé depuis l'étape 3 (voir section 10).
 
 ---
 
@@ -456,3 +458,33 @@ Pas encore créé :
 Pas encore créé :
 - `auth.guard.ts` : les routes n'ont pas encore de `canActivate`, `/` mène à `/entreprises` sans connexion ;
 - `app-header`, `main-nav`, `user-badge`, `logout-button`.
+
+### Étape 3 (branche `branche-3`) : Bootstrap
+
+| Élément | État |
+|---|---|
+| `bootstrap` | installé (`npm install bootstrap`, version 5.3) |
+| `src/styles.scss` | importe les sources SCSS et personnalise les variables du thème : `@use 'bootstrap/scss/bootstrap' with (...)` |
+
+| `src/index.html` | `lang="fr"`, polices Google Fonts Nunito (texte) et Poppins (titres, boutons) |
+
+Thème défini dans `styles.scss`, d'après les écrans 00 à 06 de `.claude/support-cours.html`. Quand une couleur du design ne passe pas le contraste WCAG AA pour du texte, une teinte plus foncée est utilisée :
+
+| Variable | Valeur | Design | Usage |
+|---|---|---|---|
+| `$primary` | `#c33f32` | `#de4e40` | bouton principal, avatar utilisateur, liens |
+| `$dark` | `#232e59` | identique | header, titres, filtre actif |
+| `$secondary` | `#556080` | identique | textes secondaires, statut Inactif |
+| `$success` | `#1f8a5b` | identique | Actif, Gagné |
+| `$info` | `#2563eb` | identique | Prospect |
+| `$warning` | `#c98a1e` | identique | En cours |
+| `$danger` | `#c33f32` | `#de4e40` | Perdu, erreurs |
+| `$*-bg-subtle` / `$*-text-emphasis` | fonds clairs du design, textes foncés | textes plus clairs | pastilles de statut, avatars |
+| `$body-bg` / `$body-color` | `#f4f6fa` / `#2b3350` | identique | fond et texte de page |
+| `$body-tertiary-color`, `$input-placeholder-color` | `#636c8a` | `#8a92ad`, `#9aa2bd` | surtitres, libellés des KPI, placeholders |
+| `$border-color` | `#e7eaf1` | identique | bordures |
+| arrondis | `0.625rem`, boutons en pilule (`50rem`), champs `0.75rem` | identique | |
+
+Les composants lisent ces valeurs via les variables CSS de Bootstrap (`var(--bs-primary)`…), sans réimporter Bootstrap.
+
+Seul le CSS est utilisé. Le JavaScript de Bootstrap n'est pas chargé : les comportements (modale, panneau latéral…) sont faits par nos composants Angular.

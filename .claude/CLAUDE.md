@@ -29,7 +29,7 @@ Au fil de la formation, on ajoute des slides au support de cours et on complète
 - TypeScript 6
 - Tests unitaires : Vitest + jsdom (`ng test`), pas Karma/Jasmine
 - Tests e2e : Playwright, dans `e2e/`
-- Styles : SCSS
+- Styles : SCSS + Bootstrap 5.3 (CSS uniquement, pas le JavaScript de Bootstrap)
 - Prettier : `printWidth: 100`, `singleQuote: true`
 - Gestionnaire de paquets : npm
 
@@ -85,6 +85,19 @@ Le dossier s'appelle `dump-components` (et non `dumb-`) dans le code : garde-le 
 | OnPush (défaut), zoneless | `zone.js`, `ChangeDetectionStrategy.Default` |
 
 Pas de `NgModule`.
+
+## Styles et Bootstrap
+
+- Bootstrap est importé **une seule fois**, dans `src/styles.scss`, avec `@use 'bootstrap/scss/bootstrap' with (...)`.
+- Les variables Sass de Bootstrap utilisées par l'appli (couleurs `$primary`, `$secondary`, `$success`…, fond, police, arrondis) sont **toutes déclarées dans ce `with (...)`**. Besoin d'une nouvelle valeur de thème : on l'ajoute là, jamais ailleurs.
+- Dans un composant, on ne réimporte pas Bootstrap (tout son CSS serait copié dans le composant). On utilise les variables CSS qu'il génère : `var(--bs-primary)`, `var(--bs-danger)`, `var(--bs-border-radius)`, `var(--bs-body-bg)`…
+- Pas de couleur en dur dans un composant : toujours une variable `--bs-*`.
+- **Le moins de SCSS custom possible, dans toute l'appli.** On met en forme avec les classes Bootstrap dans le template : composants (`btn btn-primary`, `form-control`, `form-label`, `table`, `badge`, `card`, `alert`), mise en page (`container`, `row`, `col-*`, `d-flex`, `gap-*`, `justify-content-*`), espacements (`p-*`, `m-*`), texte et couleurs (`fw-bold`, `text-secondary`, `bg-primary`), bordures (`border`, `rounded`). Avant d'écrire une règle SCSS, vérifier qu'aucune classe Bootstrap ne le fait déjà.
+- Le `.scss` d'un composant reste vide par défaut. On n'y écrit que ce que Bootstrap ne sait pas faire (ex. : un positionnement propre au composant), avec les variables `--bs-*`.
+- **Design de référence** : les premiers écrans (00 à 06 : Connexion, AppHeader, ListPageLayout, Panneau entreprise, Contacts, Popup contact) de `.claude/support-cours.html`. Les couleurs de `styles.scss` en viennent ; quelques-unes sont légèrement foncées pour respecter le contraste AA (commentaire « AA » dans le fichier).
+- Couleurs : `primary` = corail (action principale), `dark` = bleu marine (header, titres, filtre actif), `secondary` = gris.
+- Statuts : `success` = Gagné / Actif, `secondary` = Inactif, `info` = Prospect, `warning` = En cours, `danger` = Perdu. Une pastille de statut ou un avatar s'écrit `bg-*-subtle text-*-emphasis` (ex. : `badge rounded-pill bg-success-subtle text-success-emphasis`), qui respecte le contraste.
+- Polices : Nunito pour le texte, Poppins pour les titres et les boutons (chargées dans `index.html`).
 
 ## Code simple pour débutants
 

@@ -1,1 +1,59 @@
-/* You can add global styles to this file, and also import other style files */
+// Personnalisation de Bootstrap : seul endroit où l'on change ses variables Sass.
+// Dans les composants, on utilise les variables CSS générées : var(--bs-primary), var(--bs-border-radius)…
+// Couleurs : écrans 00 à 06 de .claude/support-cours.html.
+// « AA » : couleur du design foncée pour atteindre le contraste WCAG AA (4,5:1).
+@use 'bootstrap/scss/bootstrap' with (
+  // Couleurs du thème
+  $primary: #c33f32, // corail, AA (design #de4e40) : bouton principal, avatar utilisateur, liens
+  $secondary: #556080, // gris bleuté : textes secondaires, statut Inactif
+  $success: #1f8a5b, // vert : Actif, Gagné
+  $info: #2563eb, // bleu : Prospect
+  $warning: #c98a1e, // ambre : En cours
+  $danger: #c33f32, // Perdu, erreurs
+  $dark: #232e59, // bleu marine : header, titres, filtre actif
+
+  // Fonds clairs des pastilles et avatars (bg-*-subtle) et leur texte (text-*-emphasis)
+  $primary-bg-subtle: #fbe7e4,
+  $primary-text-emphasis: #b23a2e, // AA (design #de4e40)
+  $secondary-bg-subtle: #f0f1f5,
+  $secondary-text-emphasis: #556080, // AA (design #8a92ad)
+  $success-bg-subtle: #e4f1ec,
+  $success-text-emphasis: #17724b, // AA (design #1f8a5b)
+  $warning-bg-subtle: #fbf0de,
+  $warning-text-emphasis: #8a5a0f, // AA (design #c98a1e)
+  $dark-bg-subtle: #eaedf7,
+  $dark-text-emphasis: #232e59,
+
+  // Page et textes
+  $body-bg: #f4f6fa,
+  $body-color: #2b3350,
+  $body-secondary-color: #556080, // text-body-secondary : cellules de tableau
+  $body-tertiary-color: #636c8a, // text-body-tertiary, AA (design #8a92ad) : surtitres, libellés des KPI
+  $body-tertiary-bg: #fafbfd, // en-tête de tableau
+  $border-color: #e7eaf1,
+  $headings-color: #232e59,
+
+  // Polices (chargées dans index.html)
+  $font-family-sans-serif: ('Nunito', sans-serif),
+  $headings-font-family: ('Poppins', sans-serif),
+  $headings-font-weight: 700,
+  $btn-font-family: ('Poppins', sans-serif),
+  $btn-font-weight: 600,
+
+  // Formes
+  $border-radius: 0.625rem,
+  $border-radius-sm: 0.5rem,
+  $border-radius-lg: 0.75rem,
+  $border-radius-xl: 1rem, // cartes et tableaux
+  $btn-border-radius: 50rem, // boutons en pilule
+  $btn-border-radius-sm: 50rem,
+  $btn-border-radius-lg: 50rem,
+  $card-border-color: #e7eaf1,
+
+  // Formulaires
+  $input-border-color: #dde1ea,
+  $input-border-radius: 0.75rem,
+  $input-placeholder-color: #636c8a, // AA (design #9aa2bd)
+  $form-label-color: #232e59,
+  $form-label-font-weight: 600
+);
