@@ -28,7 +28,7 @@ Au fil de la formation, on ajoute des slides au support de cours et on complète
 - Angular 22 : standalone, signals, zoneless, OnPush par défaut
 - TypeScript 6
 - Tests unitaires : Vitest + jsdom (`ng test`), pas Karma/Jasmine
-- Tests e2e : Playwright (pas encore installé)
+- Tests e2e : Playwright, dans `e2e/`
 - Styles : SCSS
 - Prettier : `printWidth: 100`, `singleQuote: true`
 - Gestionnaire de paquets : npm
@@ -39,6 +39,13 @@ Au fil de la formation, on ajoute des slides au support de cours et on complète
 npm start       # ng serve -> http://localhost:4200
 npm run build   # build de production
 npm test        # tests unitaires Vitest
+
+npm run e2e           # tests e2e Playwright (dossier e2e/), sans navigateur visible
+npm run e2e:ui        # mode UI : pas à pas, relance automatique
+npm run e2e:headed    # affiche le navigateur pendant les tests
+npm run e2e:chromium  # Chromium uniquement, plus rapide
+npm run e2e:report    # ouvre le rapport HTML du dernier lancement
+npm run e2e:codegen   # enregistre les clics sur http://localhost:4200 et génère le test
 ```
 
 ## Architecture

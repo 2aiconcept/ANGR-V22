@@ -1,0 +1,14 @@
+/* Tests e2e Playwright : exécutés par Node, d'où les types "node" (process, __dirname…). */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/e2e",
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "playwright.config.ts",
+    "e2e/**/*.ts"
+  ]
+}

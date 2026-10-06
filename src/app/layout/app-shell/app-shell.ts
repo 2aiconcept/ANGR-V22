@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss',
+  selector: 'app-app-shell',
+  styleUrl: './app-shell.scss',
+  templateUrl: './app-shell.html',
 })
-export class App {}
+export class AppShell {}

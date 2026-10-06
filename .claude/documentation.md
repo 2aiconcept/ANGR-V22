@@ -79,16 +79,18 @@ src/app/
 │  │  └─ entreprises-service.ts
 │  ├─ smart-components/
 │  │  └─ entreprises-page/
-│  └─ dump-components/
-│     └─ entreprise-form/
+│  ├─ dump-components/
+│  │  └─ entreprise-form/
+│  └─ entreprises.routes.ts
 │
 ├─ contacts/
 │  ├─ data-access/
 │  │  └─ contacts-service.ts
 │  ├─ smart-components/
 │  │  └─ contacts-page/
-│  └─ dump-components/
-│     └─ contact-form/
+│  ├─ dump-components/
+│  │  └─ contact-form/
+│  └─ contacts.routes.ts
 │
 ├─ opportunites/
 │  ├─ data-access/
@@ -135,14 +137,14 @@ src/app/
 ```ts
 // app.routes.ts
 export const routes: Routes = [
-  { path: 'connexion', canActivate: [guestGuard],
+  { path: 'connexion', title: 'Connexion', canActivate: [guestGuard],
     loadComponent: () => import('./auth/smart-components/auth-page/auth-page').then(m => m.AuthPage) },
 
   { path: '', component: AppShell, canActivate: [authGuard], children: [
       { path: 'entreprises',
-        loadComponent: () => import('./entreprises/smart-components/entreprises-page/entreprises-page').then(m => m.EntreprisesPage) },
+        loadChildren: () => import('./entreprises/entreprises.routes').then(m => m.ENTREPRISES_ROUTES) },
       { path: 'contacts',
-        loadComponent: () => import('./contacts/smart-components/contacts-page/contacts-page').then(m => m.ContactsPage) },
+        loadChildren: () => import('./contacts/contacts.routes').then(m => m.CONTACTS_ROUTES) },
       { path: 'opportunites',
         loadChildren: () => import('./opportunites/opportunites.routes').then(m => m.OPPORTUNITES_ROUTES) },
       { path: '', redirectTo: 'entreprises', pathMatch: 'full' },
@@ -152,14 +154,28 @@ export const routes: Routes = [
 ];
 ```
 
+Chaque feature du shell a son fichier de routes. `app.routes.ts` ne connaît que le préfixe (`entreprises`, `contacts`, `opportunites`) ; le reste est décidé dans la feature.
+
 ```ts
+// entreprises/entreprises.routes.ts
+export const ENTREPRISES_ROUTES: Routes = [
+  { path: '', title: 'Entreprises', loadComponent: () => import('./smart-components/entreprises-page/entreprises-page').then(m => m.EntreprisesPage) },
+];
+
+// contacts/contacts.routes.ts
+export const CONTACTS_ROUTES: Routes = [
+  { path: '', title: 'Contacts', loadComponent: () => import('./smart-components/contacts-page/contacts-page').then(m => m.ContactsPage) },
+];
+
 // opportunites/opportunites.routes.ts
 export const OPPORTUNITES_ROUTES: Routes = [
-  { path: '', loadComponent: () => import('./smart-components/opportunites-page/opportunites-page').then(m => m.OpportunitesPage) },
-  { path: 'nouvelle', loadComponent: () => import('./smart-components/opportunite-form-page/opportunite-form-page').then(m => m.OpportuniteFormPage) },
-  { path: ':id/modifier', loadComponent: () => import('./smart-components/opportunite-form-page/opportunite-form-page').then(m => m.OpportuniteFormPage) },
+  { path: '', title: 'Opportunités', loadComponent: () => import('./smart-components/opportunites-page/opportunites-page').then(m => m.OpportunitesPage) },
+  { path: 'nouvelle', title: 'Nouvelle opportunité', loadComponent: () => import('./smart-components/opportunite-form-page/opportunite-form-page').then(m => m.OpportuniteFormPage) },
+  { path: ':id/modifier', title: 'Modifier une opportunité', loadComponent: () => import('./smart-components/opportunite-form-page/opportunite-form-page').then(m => m.OpportuniteFormPage) },
 ];
 ```
+
+Chaque route de page a un `title` : Angular l'affiche dans l'onglet et le lecteur d'écran l'annonce à chaque navigation. Les routes `''` (shell), les redirections et `**` n'en ont pas, car ce ne sont pas des pages.
 
 ### 3.2 Le layout est choisi par le router
 
@@ -186,7 +202,7 @@ Au démarrage avec une adresse vide, le guard s'exécute **avant** l'affichage :
 
 ### 3.4 Lazy loading
 
-- `loadComponent` pour les features d'une seule page (`auth`, `entreprises`, `contacts`), `loadChildren` pour une feature qui a ses propres routes (`opportunites`).
+- `loadChildren` pour les features du shell (`entreprises`, `contacts`, `opportunites`) : chacune a son fichier `<feature>.routes.ts`, même avec une seule page, pour pouvoir ajouter des routes sans toucher à `app.routes.ts`. `loadComponent` pour `auth`, seule page hors du shell.
 - Le lazy loading passe obligatoirement par un `import()` dynamique. Référencer un tableau de routes importé en haut du fichier ne diffère rien.
 - `AppShell` et les guards restent dans le bundle principal : ils servent sur toutes les pages, ou avant tout chargement.
 - `AuthPage` est chargée à la demande : un commercial qui revient avec une session encore valide ne la télécharge jamais.
@@ -235,7 +251,7 @@ Le formulaire s'affiche dans un **panneau latéral** (`SidePanel`), sans changem
 | `opportunite-form-page` | smart | Pages `/opportunites/nouvelle` et `/opportunites/:id/modifier`. Reçoit `id` en input, distingue création et modification, gère le cas d'une opportunité introuvable, enregistre puis revient à la liste. |
 | `opportunite-form` | dumb | Formulaire d'une opportunité : intitulé, entreprise, contact (filtré selon l'entreprise choisie), montant, date de clôture, statut, notes. Ne sait pas s'il crée ou s'il modifie. |
 
-Ici, le formulaire est sur **une page dédiée** : c'est la seule feature qui a ses propres routes.
+Ici, le formulaire est sur **une page dédiée** : c'est la seule feature qui a plusieurs routes.
 
 Statuts : `'Prospect' | 'En cours' | 'Gagné' | 'Perdu'`, `Prospect` par défaut.
 
@@ -420,3 +436,23 @@ Pas encore créé :
 - `layout/` (`app-shell`, `app-header`, `main-nav`, `user-badge`, `logout-button`) ;
 - `auth.guard.ts`, `opportunites.routes.ts`, `opportunite-form-page` ;
 - les routes : `app.routes.ts` est vide, et `withComponentInputBinding()` n'est pas encore dans `app.config.ts`.
+
+### Étape 2 (branche `branche-2`) : routage et shell
+
+| Élément | État |
+|---|---|
+| `app.routes.ts` | `connexion` (hors shell), puis `''` → `AppShell` avec `entreprises`, `contacts`, `opportunites` en `loadChildren`, redirection `''` → `entreprises`, `**` → `''` |
+| `entreprises.routes.ts`, `contacts.routes.ts`, `opportunites.routes.ts` | créés, une route par page avec son `title` |
+| `opportunite-form-page` | créé, vide (pas encore d'input `id`) |
+| `app.config.ts` | `withComponentInputBinding()` ajouté |
+| `app.html` | un seul `<router-outlet />` |
+| `layout/app-shell/` | créé : `<main>` + `<router-outlet />`, sans header pour l'instant |
+| `layout/list-page-layout/`, `layout/split-layout/` | créés |
+
+Écarts avec la cible (sections 2 et 5) :
+- `app-shell` est dans `layout/app-shell/`, sans sous-dossier `smart-components/` ;
+- `list-page-layout` et `split-layout` sont dans `layout/`, et non dans `shared/dump-components/`.
+
+Pas encore créé :
+- `auth.guard.ts` : les routes n'ont pas encore de `canActivate`, `/` mène à `/entreprises` sans connexion ;
+- `app-header`, `main-nav`, `user-badge`, `logout-button`.
