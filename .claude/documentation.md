@@ -500,4 +500,10 @@ Seul le CSS est utilisé. Le JavaScript de Bootstrap n'est pas chargé : les com
 
 Écart avec le design (écran 00) : le surtitre « Mini-CRM » est en corail dans le design, mais le corail sur le bleu marine n'atteint pas le contraste AA (environ 2,3:1). Il est affiché en blanc à 75 %. Le corail ne reste que sur le point décoratif du logo.
 
-Pas encore fait : la zone `[splitRight]` (onglets Connexion / Créer un compte, `auth-form`, `password-field`).
+Pas encore fait : la zone `[splitRight]` (onglets Connexion / Créer un compte, `auth-form`, `password-field`). Les formulaires (Signal Forms) sont reportés plus loin dans la formation.
+
+### Étape 5 : page Entreprises
+
+| Élément | État |
+|---|---|
+| `layout/list-page-layout/` | fait, d'après l'écran 02 du design. Uniquement des classes Bootstrap, `.scss` vide. Dans l'ordre : `[pageHeader]` (titre à gauche, bouton à droite, alignés en bas), `[pageKpis]` (grille `row-cols-2 row-cols-lg-4` : chaque élément projeté devient une colonne), puis une carte blanche avec `[pageToolbar]` en en-tête, le contenu par défaut (le tableau) et `[pageFooter]` en pied (compteur à gauche, pagination à droite). Pas de `<main>` : il est déjà dans `AppShell` |

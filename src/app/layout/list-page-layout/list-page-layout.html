@@ -1,1 +1,23 @@
-<p>list-page-layout works!</p>
+<div class="container-xl py-4">
+  <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+    <ng-content select="[pageHeader]" />
+  </div>
+
+  <div class="row row-cols-2 row-cols-lg-4 g-3 mb-4">
+    <ng-content select="[pageKpis]" />
+  </div>
+
+  <div class="card bg-white overflow-hidden">
+    <div class="card-header bg-white d-flex flex-wrap align-items-center gap-3 p-3">
+      <ng-content select="[pageToolbar]" />
+    </div>
+
+    <ng-content />
+
+    <div
+      class="card-footer bg-white d-flex flex-wrap align-items-center justify-content-between gap-3 px-4 py-3 small text-body-tertiary"
+    >
+      <ng-content select="[pageFooter]" />
+    </div>
+  </div>
+</div>
