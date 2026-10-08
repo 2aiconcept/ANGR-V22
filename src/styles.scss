@@ -49,6 +49,9 @@
   $btn-border-radius-sm: 50rem,
   $btn-border-radius-lg: 50rem,
   $card-border-color: #e7eaf1,
+  $card-bg: #fff, // par défaut, le fond de la page (gris) : les cartes seraient invisibles
+  $card-cap-bg: #fff, // en-tête et pied de carte
+  $table-bg: #fff, // même raison pour les cellules de tableau
 
   // Formulaires
   $input-border-color: #dde1ea,

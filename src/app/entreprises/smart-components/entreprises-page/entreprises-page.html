@@ -1,1 +1,118 @@
-<p>entreprises-page works!</p>
+<app-list-page-layout>
+  <div pageHeader>
+    <p class="mb-1 small fw-semibold text-body-tertiary">Portefeuille commercial</p>
+    <h1 class="h2 mb-0">Entreprises</h1>
+  </div>
+  <button pageHeader type="button" class="btn btn-primary text-uppercase px-4 shadow">
+    <span aria-hidden="true">+</span> Nouvelle entreprise
+  </button>
+
+  <div pageKpis>
+    <div class="card h-100 px-4 py-3">
+      <p class="mb-1 small text-body-tertiary">Entreprises</p>
+      <p class="h3 mb-0 text-dark">{{ entreprises.length }}</p>
+    </div>
+  </div>
+  <div pageKpis>
+    <div class="card h-100 px-4 py-3">
+      <p class="mb-1 small text-body-tertiary">Actives</p>
+      <p class="h3 mb-0 text-success">{{ nbActives }}</p>
+    </div>
+  </div>
+  <div pageKpis>
+    <div class="card h-100 px-4 py-3">
+      <p class="mb-1 small text-body-tertiary">Inactives</p>
+      <p class="h3 mb-0 text-secondary">{{ nbInactives }}</p>
+    </div>
+  </div>
+  <div pageKpis>
+    <div class="card h-100 px-4 py-3">
+      <p class="mb-1 small text-body-tertiary">Contacts liés</p>
+      <p class="h3 mb-0 text-primary">{{ nbContactsLies }}</p>
+    </div>
+  </div>
+
+  <div pageToolbar class="input-group flex-grow-1 w-auto">
+    <span class="input-group-text bg-body text-body-tertiary" aria-hidden="true">⌕</span>
+    <label class="visually-hidden" for="recherche-entreprise">Rechercher une entreprise</label>
+    <input
+      id="recherche-entreprise"
+      type="search"
+      class="form-control bg-body border-start-0 ps-0"
+      placeholder="Rechercher une entreprise, un secteur…"
+    />
+  </div>
+  <div pageToolbar class="d-flex gap-2" role="group" aria-label="Filtrer par statut">
+    <button type="button" class="btn btn-sm btn-dark px-3" aria-pressed="true">Toutes</button>
+    <button type="button" class="btn btn-sm border text-secondary px-3" aria-pressed="false">
+      Actives
+    </button>
+    <button type="button" class="btn btn-sm border text-secondary px-3" aria-pressed="false">
+      Inactives
+    </button>
+  </div>
+
+  <table class="table table-hover align-middle mb-0">
+    <caption class="visually-hidden">Liste des entreprises</caption>
+    <thead>
+      <tr class="small text-uppercase">
+        <th scope="col" class="px-4 bg-body-tertiary text-body-tertiary">Entreprise</th>
+        <th scope="col" class="bg-body-tertiary text-body-tertiary">Secteur</th>
+        <th scope="col" class="bg-body-tertiary text-body-tertiary">Téléphone</th>
+        <th scope="col" class="bg-body-tertiary text-body-tertiary text-center">Contacts</th>
+        <th scope="col" class="bg-body-tertiary text-body-tertiary">Statut</th>
+        <th scope="col" class="px-4 bg-body-tertiary">
+          <span class="visually-hidden">Actions</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (entreprise of entreprises; track entreprise.id) {
+        <tr>
+          <td class="px-4">
+            <div class="d-flex align-items-center gap-3">
+              <span
+                class="avatar d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-3 fw-bold bg-dark-subtle text-dark-emphasis"
+                aria-hidden="true"
+                >{{ initiales(entreprise.nom) }}</span
+              >
+              <div>
+                <p class="mb-0 fw-semibold text-dark">{{ entreprise.nom }}</p>
+                <p class="mb-0 small text-body-tertiary">{{ entreprise.adresse }}</p>
+              </div>
+            </div>
+          </td>
+          <td class="text-body-secondary">{{ entreprise.secteur }}</td>
+          <td class="text-body-secondary">{{ entreprise.telephone }}</td>
+          <td class="text-center fw-semibold text-dark">{{ entreprise.nbContacts }}</td>
+          <td>
+            @if (entreprise.statut === 'Actif') {
+              <span class="badge rounded-pill bg-success-subtle text-success-emphasis">
+                <span aria-hidden="true">●</span> Actif
+              </span>
+            } @else {
+              <span class="badge rounded-pill bg-secondary-subtle text-secondary-emphasis">
+                <span aria-hidden="true">●</span> Inactif
+              </span>
+            }
+          </td>
+          <td class="px-4 text-end">
+            <button type="button" class="btn btn-sm border text-dark text-nowrap">
+              <span aria-hidden="true">✎</span> Modifier
+              <span class="visually-hidden">{{ entreprise.nom }}</span>
+            </button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6" class="px-4 py-4 text-center text-body-secondary">Aucune entreprise.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <p pageFooter class="mb-0">{{ entreprises.length }} entreprises affichées</p>
+  <nav pageFooter aria-label="Pagination">
+    <button type="button" class="btn btn-sm btn-dark" aria-current="page">1</button>
+  </nav>
+</app-list-page-layout>
