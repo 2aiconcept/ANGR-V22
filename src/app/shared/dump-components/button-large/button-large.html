@@ -1,0 +1,8 @@
+<button
+  type="button"
+  class="btn text-uppercase px-4 shadow"
+  [class]="'btn-' + couleur()"
+  (click)="sender.emit()"
+>
+  <span aria-hidden="true">{{ symbole() }}</span> {{ texte() }}
+</button>

@@ -20,7 +20,7 @@ describe('EntreprisesPage', () => {
     const lignes = page.querySelectorAll('tbody tr');
 
     expect(lignes.length).toBe(4);
-    expect(lignes[0].textContent).toContain('Durand Industries');
+    expect(lignes[0].textContent).toContain('TechVision');
   });
 
   it("affiche le nombre d'entreprises", async () => {
@@ -29,11 +29,11 @@ describe('EntreprisesPage', () => {
     expect(page.textContent).toContain('4 entreprises affichées');
   });
 
-  it('affiche les initiales sans tenir compte du « & »', async () => {
+  it("affiche l'initiale de l'entreprise dans l'avatar", async () => {
     const page = await afficher();
 
-    const ligne = page.querySelectorAll('tbody tr')[2];
+    const avatar = page.querySelector('tbody tr td span');
 
-    expect(ligne.textContent).toContain('BF');
+    expect(avatar?.textContent?.trim()).toBe('T');
   });
 });

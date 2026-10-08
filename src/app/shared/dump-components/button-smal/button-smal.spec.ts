@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FilterChips } from './filter-chips';
+import { ButtonSmal } from './button-smal';
 
-describe('FilterChips', () => {
-  let component: FilterChips;
-  let fixture: ComponentFixture<FilterChips>;
+describe('ButtonSmal', () => {
+  let component: ButtonSmal;
+  let fixture: ComponentFixture<ButtonSmal>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FilterChips],
+      imports: [ButtonSmal],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FilterChips);
+    fixture = TestBed.createComponent(ButtonSmal);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

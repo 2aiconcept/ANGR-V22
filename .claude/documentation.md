@@ -229,8 +229,8 @@ Au démarrage avec une adresse vide, le guard s'exécute **avant** l'affichage :
 | Élément | Type | Rôle |
 |---|---|---|
 | `entreprises-service.ts` | data-access | Liste, création et modification des entreprises (`GET`, `POST`, `PUT`). Porte la liste en état et les valeurs calculées pour les statistiques. |
-| `entreprises-page` | smart | Page `/entreprises`. Utilise `ListPageLayout`. Gère la recherche, le filtre de statut, la page courante, et l'ouverture du `SidePanel` d'ajout ou de modification. |
-| `entreprise-form` | dumb | Formulaire d'une entreprise : nom, secteur, adresse, téléphone, statut (`Actif` / `Inactif` via `SegmentedControl`). Reçoit la valeur initiale, émet la valeur saisie. |
+| `entreprises-page` | smart | Page `/entreprises`. Utilise `ListPageLayout`. Gère la recherche, le filtre « avec / sans contact », la page courante, et l'ouverture du `SidePanel` d'ajout ou de modification. |
+| `entreprise-form` | dumb | Formulaire d'une entreprise : nom, secteur, adresse, téléphone (pas de statut : voir 7.2). Reçoit la valeur initiale, émet la valeur saisie. |
 
 Le formulaire s'affiche dans un **panneau latéral** (`SidePanel`), sans changement de route : la page contient le panneau dans un `@if`, piloté par un signal `editing` (`null`, `'new'` ou l'entreprise à modifier).
 
@@ -315,7 +315,7 @@ Exemple d'utilisation :
 | Composant | Où dans le design | Contrat |
 |---|---|---|
 | `data-table` | les tableaux des trois listes | Reçoit les colonnes et les lignes. Les cellules qui ne sont pas du texte simple (avatar, badge, montant, bouton Modifier) sont fournies par la page en `ng-template`. Le composant ne contient aucun `@if` sur un type d'entité. |
-| `segmented-control` | « Connexion \| Créer un compte », « Actif \| Inactif », « Prospect \| En cours \| Gagné \| Perdu » | Groupe de boutons collés, une seule option sélectionnée. Reçoit les options et la valeur, émet la valeur choisie. |
+| `segmented-control` | « Connexion \| Créer un compte », « Prospect \| En cours \| Gagné \| Perdu » | Groupe de boutons collés, une seule option sélectionnée. Reçoit les options et la valeur, émet la valeur choisie. |
 | `password-field` | les champs mot de passe | Champ avec le bouton « Afficher / Masquer ». Seul champ de formulaire transformé en composant, parce qu'il porte un comportement. Se branche sur le formulaire comme un champ natif. |
 | `stat-card` | les quatre cartes de chiffres sous le titre | Reçoit un libellé, une valeur et une couleur. |
 | `search-field` | la barre de recherche | Champ avec icône. Émet le texte saisi. |
@@ -347,7 +347,7 @@ L'API (voir `endpoints-et-donnees.md`) ne fournit pas tout ce que ce document pr
 | Prévu ici | Ce que fait l'API |
 |---|---|
 | `auth/` : connexion, inscription, JWT, guards (3.3, 4.1) | Aucun endpoint d'authentification, aucun jeton |
-| Entreprise : statut `Actif` / `Inactif` (4.2, filtres « Actives / Inactives ») | Pas de champ statut sur une entreprise |
+| Entreprise : statut `Actif` / `Inactif` (design : badges, cartes et filtres « Actives / Inactives ») | Pas de champ statut sur une entreprise. **Décidé** : pas de statut côté front non plus (l'interface reste celle de l'API). La page affiche à la place des données calculables : cartes « Secteurs » et « Sans contact », filtres « Avec contacts / Sans contact », pas de colonne Statut |
 | Opportunité : date de clôture et notes (4.4) | Pas de date ; le champ `description` tient lieu de notes |
 | Opportunité : intitulé | Le champ s'appelle `titre` |
 
@@ -434,7 +434,7 @@ Composants et services générés, **encore vides** (pas d'input, d'output, de l
 | `entreprises/` | `entreprises-service`, `entreprises-page`, `entreprise-form` |
 | `contacts/` | `contacts-service`, `contacts-page`, `contact-form` |
 | `opportunites/` | `opportunites-service`, `opportunites-page`, `opportunite-form` |
-| `shared/dump-components/` | `avatar-initials`, `data-table`, `filter-chips`, `list-page-layout`, `modal`, `paginator`, `password-field`, `search-field`, `segmented-control`, `side-panel`, `split-layout`, `stat-card`, `status-badge` |
+| `shared/dump-components/` | `avatar-initials`, `data-table`, `filter-chips` (supprimé à l'étape 5), `list-page-layout`, `modal`, `paginator`, `password-field`, `search-field`, `segmented-control`, `side-panel`, `split-layout`, `stat-card`, `status-badge` |
 
 Pas encore créé :
 - `layout/` (`app-shell`, `app-header`, `main-nav`, `user-badge`, `logout-button`) ;
@@ -507,10 +507,13 @@ Pas encore fait : la zone `[splitRight]` (onglets Connexion / Créer un compte, 
 | Élément | État |
 |---|---|
 | `layout/list-page-layout/` | fait, d'après l'écran 02 du design. Uniquement des classes Bootstrap, `.scss` vide. Dans l'ordre : `[pageHeader]` (titre à gauche, bouton à droite, alignés en bas), `[pageKpis]` (grille `row-cols-2 row-cols-lg-4` : chaque élément projeté devient une colonne), puis une carte blanche avec `[pageToolbar]` en en-tête, le contenu par défaut (le tableau) et `[pageFooter]` en pied (compteur à gauche, pagination à droite). Pas de `<main>` : il est déjà dans `AppShell` |
-| `entreprises/utils/models/entreprise.ts` | créé : interface `Entreprise` (voir `endpoints-et-donnees.md`, 1.2) et type `StatutEntreprise` (`'Actif' \| 'Inactif'`). Contient en plus `statut` et `nbContacts`, qui ne viennent pas de l'API (voir l'écart ci-dessous) |
-| `entreprises-page` | conforme à l'écran 02 du design, **en statique** (aucun comportement). Tableau `entreprises: Entreprise[]` de 4 entreprises écrites en dur (pas encore de signal, de service ni d'API). `nbActives`, `nbInactives`, `nbContactsLies` calculés une fois dans le `.ts`, méthode `initiales(nom)`. Template dans `ListPageLayout` : `[pageHeader]` (surtitre, `<h1>`, bouton « Nouvelle entreprise »), `[pageKpis]` (4 cartes en HTML), `[pageToolbar]` (champ de recherche et pastilles Toutes / Actives / Inactives, sans action), tableau à 6 colonnes (avatar d'initiales + nom + adresse, secteur, téléphone, contacts, badge de statut avec `@if`, bouton Modifier) avec `@for (… ; track entreprise.id)` et `@empty`, `[pageFooter]` (compteur et page 1). Le `.scss` ne fixe que la taille de l'avatar |
+| `entreprises/utils/models/entreprise.ts` | créé : interface `Entreprise` (voir `endpoints-et-donnees.md`, 1.2) identique à l'API, sans statut (voir 7.2) |
+| `contacts/utils/models/contact.ts` | créé : interface `Contact` (voir `endpoints-et-donnees.md`, 1.3). Pas utilisé pour l'instant : servira à la page Contacts |
+| `entreprises-page` | d'après l'écran 02 du design, **en statique** (aucun comportement). Signal `entreprises = signal<Entreprise[]>([...])` de 4 entreprises écrites en dur (celles de l'API) (pas encore de service ni d'API). Méthode `initiales(nom)`. Template dans `ListPageLayout` : `[pageHeader]` (`PageTitle`, `ButtonLarge` « Nouvelle entreprise », sans action), `[pageKpis]` vide (pas de carte de chiffres pour l'instant ; `shared/dump-components/stat-card` est gardé pour un éventuel dashboard), `[pageToolbar]` (champ de recherche, sans action), tableau à 4 colonnes (avatar d'initiales + nom + adresse, secteur, téléphone, bouton Modifier) avec `@for (… ; track entreprise.id)` et `@empty`, `[pageFooter]` (compteur et page 1). Le `.scss` ne fixe que la taille de l'avatar |
 
-Écarts avec l'API (section 7.2) : `statut` et `nbContacts` sont dans le mock pour suivre le design. Quand on branchera le service, l'API ne fournira pas `statut`, et `nbContacts` devra être calculé par la page à partir de `ContactsService` (comme l'exemple de la section 1.1). Tous les avatars sont en bleu marine clair : les couleurs variées du design viendront avec `AvatarInitials`.
+Écarts avec le design (section 7.2) : pas de statut d'entreprise, car l'API n'en a pas. Pas de nombre de contacts par entreprise : avec une pagination côté serveur, le calcul côté front ne passe pas à l'échelle (il faudrait charger tous les contacts), et l'API ne fournit ni pagination ni compte. Tous les avatars sont en bleu marine clair : les couleurs variées du design viendront avec `AvatarInitials`.
+| `shared/dump-components/page-title/` | créé : surtitre (`<p>`) et titre de page (`<h1>`). Inputs `sousTitre` et `titre`. Écart avec la règle « pas de composant sans comportement » (section 1 et `CLAUDE.md`) : gardé car réutilisé par les trois pages de liste, et premier exemple d'`input()` en formation. Comme tout élément projeté, il doit porter l'attribut de sa zone : `<app-page-title pageHeader … />` |
+| `shared/dump-components/button-large/` | créé : bouton d'action principal (majuscules, ombre). Inputs `symbole` (affiché mais caché aux lecteurs d'écran), `texte`, `couleur` (`'primary' \| 'secondary' \| 'dark'`, `'primary'` par défaut), appliquée par `[class]="'btn-' + couleur()"` en plus des classes fixes. Output `sender` (`output<void>()`), émis au clic : c'est la page qui décide quoi faire |
 | `src/styles.scss` | ajout de `$card-bg`, `$card-cap-bg`, `$table-bg` à `#fff` : dans Bootstrap 5.3, ils valent par défaut le fond de la page (gris), et les cartes et tableaux ne se détachaient pas |
 
 Écart avec la cible (section 1) : les modèles d'une feature sont dans `<feature>/utils/models/`, et non dans `data-access/`.

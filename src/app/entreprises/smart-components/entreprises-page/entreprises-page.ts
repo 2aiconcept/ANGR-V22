@@ -1,57 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ListPageLayout } from '../../../layout/list-page-layout/list-page-layout';
 import { Entreprise } from '../../utils/models/entreprise';
+import { ButtonLarge } from '../../../shared/dump-components/button-large/button-large';
+import { PageTitle } from '../../../shared/dump-components/page-title/page-title';
 
 @Component({
-  imports: [ListPageLayout],
+  imports: [ListPageLayout, ButtonLarge, PageTitle],
   selector: 'app-entreprises-page',
   styleUrl: './entreprises-page.scss',
   templateUrl: './entreprises-page.html',
 })
 export class EntreprisesPage {
   // Données écrites en dur en attendant le service et l'API.
-  protected readonly entreprises: Entreprise[] = [
+  protected readonly entreprises = signal<Entreprise[]>([
     {
       id: 1,
-      nom: 'Durand Industries',
-      secteur: 'Industrie',
-      adresse: '12 rue des Fabriques, Lyon',
-      telephone: '04 72 11 22 33',
-      statut: 'Actif',
-      nbContacts: 5,
+      nom: 'TechVision',
+      secteur: 'IT & Cloud',
+      adresse: "12 rue de l'Innovation, 75011 Paris",
+      telephone: '01 45 67 89 00',
     },
     {
       id: 2,
-      nom: 'Novatek Solutions',
-      secteur: 'Informatique',
-      adresse: "8 av. de l'Innovation, Paris",
-      telephone: '01 45 67 89 10',
-      statut: 'Actif',
-      nbContacts: 8,
+      nom: 'StratConseil',
+      secteur: 'Conseil',
+      adresse: '8 avenue Foch, 69006 Lyon',
+      telephone: '04 72 33 45 00',
     },
     {
       id: 3,
-      nom: 'Berthier & Fils',
-      secteur: 'BTP',
-      adresse: '27 chemin du Port, Marseille',
-      telephone: '04 91 33 44 55',
-      statut: 'Inactif',
-      nbContacts: 2,
+      nom: 'ShopNow',
+      secteur: 'E-commerce',
+      adresse: '25 quai des Chartrons, 33000 Bordeaux',
+      telephone: '05 56 12 34 00',
     },
     {
       id: 4,
-      nom: 'Aquitaine Logistique',
-      secteur: 'Transport',
-      adresse: '3 zone Sud, Bordeaux',
-      telephone: '05 56 78 90 12',
-      statut: 'Actif',
-      nbContacts: 4,
+      nom: 'FinFlow',
+      secteur: 'Fintech',
+      adresse: '3 place Bellecour, 69002 Lyon',
+      telephone: '04 78 90 12 00',
     },
-  ];
-
-  protected readonly nbActives = this.entreprises.filter((e) => e.statut === 'Actif').length;
-  protected readonly nbInactives = this.entreprises.filter((e) => e.statut === 'Inactif').length;
-  protected readonly nbContactsLies = this.entreprises.reduce((total, e) => total + e.nbContacts, 0);
+  ]);
 
   protected initiales(nom: string): string {
     return nom
@@ -61,5 +51,9 @@ export class EntreprisesPage {
       .map((mot) => mot[0])
       .join('')
       .toUpperCase();
+  }
+
+  addEntreprise() {
+    console.log('add entreprise clicked');
   }
 }
