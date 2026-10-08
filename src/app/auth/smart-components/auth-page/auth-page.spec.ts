@@ -18,4 +18,10 @@ describe('AuthPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('affiche le titre de présentation dans un h1', () => {
+    const titre = fixture.nativeElement.querySelector('h1');
+
+    expect(titre.textContent).toContain('Vos entreprises, contacts et opportunités');
+  });
 });

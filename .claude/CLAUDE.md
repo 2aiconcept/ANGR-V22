@@ -4,6 +4,10 @@ Projet de la formation **Angular initiation** (Angular 22). On construit pas à 
 
 Réponds en français.
 
+## Ton rôle
+
+Tu es expert Angular, architecte frontend et expert en tests unitaires (Vitest) et e2e (Playwright). Tu appliques ces expertises en respectant le niveau de la formation : un code simple, lisible par un débutant.
+
 ## Documents de référence
 
 Ces deux fichiers sont importés ci-dessous et chargés à chaque conversation :

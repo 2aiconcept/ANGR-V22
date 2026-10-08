@@ -35,5 +35,5 @@ export const routes: Routes = [
   },
 
   // Adresse inconnue : retour à l'accueil
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '/connexion' },
 ];

@@ -1,21 +1,39 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { SplitLayout } from './split-layout';
 
+@Component({
+  imports: [SplitLayout],
+  template: `
+    <app-split-layout>
+      <p splitLeft>Présentation</p>
+      <p splitRight>Formulaire</p>
+    </app-split-layout>
+  `,
+})
+class TestHost {}
+
 describe('SplitLayout', () => {
-  let component: SplitLayout;
-  let fixture: ComponentFixture<SplitLayout>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [SplitLayout],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(SplitLayout);
-    component = fixture.componentInstance;
+  async function afficher(): Promise<HTMLElement> {
+    const fixture = TestBed.createComponent(TestHost);
     await fixture.whenStable();
+    return fixture.nativeElement;
+  }
+
+  it('affiche le contenu splitRight dans la zone principale', async () => {
+    const page = await afficher();
+
+    const main = page.querySelector('main');
+
+    expect(main?.textContent).toContain('Formulaire');
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('affiche le contenu splitLeft hors de la zone principale', async () => {
+    const page = await afficher();
+
+    const main = page.querySelector('main');
+
+    expect(page.textContent).toContain('Présentation');
+    expect(main?.textContent).not.toContain('Présentation');
   });
 });

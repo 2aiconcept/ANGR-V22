@@ -392,7 +392,9 @@ Chaque outil lit son propre fichier :
 | Fichier | Lu par | Clé racine |
 |---|---|---|
 | `.vscode/mcp.json` | VS Code (mode agent de Copilot Chat) | `servers` |
-| `.mcp.json` (racine du dépôt, **pas encore créé**) | Claude Code | `mcpServers` |
+| `.mcp.json` (racine du dépôt) | Claude Code | `mcpServers` |
+
+Dans `.mcp.json`, `npx` est lancé via `cmd /c` (`"command": "cmd", "args": ["/c", "npx", …]`) : sous Windows, Claude Code ne trouve pas `npx` directement.
 
 ```json
 // .vscode/mcp.json
@@ -466,6 +468,7 @@ Pas encore créé :
 | `bootstrap` | installé (`npm install bootstrap`, version 5.3) |
 | `src/styles.scss` | importe les sources SCSS et personnalise les variables du thème : `@use 'bootstrap/scss/bootstrap' with (...)` |
 
+| `layout/split-layout/` | fait : deux zones `[splitLeft]` (panneau bleu marine, 5 colonnes sur grand écran) et `[splitRight]` (dans `<main>`, contenu centré). Empilées sur mobile. Uniquement des classes Bootstrap, `.scss` vide. Les éléments projetés dans `[splitLeft]` sont répartis verticalement (haut, milieu, bas) |
 | `src/index.html` | `lang="fr"`, polices Google Fonts Nunito (texte) et Poppins (titres, boutons) |
 
 Thème défini dans `styles.scss`, d'après les écrans 00 à 06 de `.claude/support-cours.html`. Quand une couleur du design ne passe pas le contraste WCAG AA pour du texte, une teinte plus foncée est utilisée :
@@ -488,3 +491,13 @@ Thème défini dans `styles.scss`, d'après les écrans 00 à 06 de `.claude/sup
 Les composants lisent ces valeurs via les variables CSS de Bootstrap (`var(--bs-primary)`…), sans réimporter Bootstrap.
 
 Seul le CSS est utilisé. Le JavaScript de Bootstrap n'est pas chargé : les comportements (modale, panneau latéral…) sont faits par nos composants Angular.
+
+### Étape 4 (branche `branche-4`) : page de connexion
+
+| Élément | État |
+|---|---|
+| `auth-page` | utilise `SplitLayout`. Zone `[splitLeft]` faite, en HTML simple (pas de composant) : logo « liane. » en haut, surtitre « Mini-CRM » + `<h1>` + phrase d'accroche au milieu, « © 2026 Liane » en bas. Uniquement des classes Bootstrap. Zone `[splitRight]` encore vide (contenu de test) |
+
+Écart avec le design (écran 00) : le surtitre « Mini-CRM » est en corail dans le design, mais le corail sur le bleu marine n'atteint pas le contraste AA (environ 2,3:1). Il est affiché en blanc à 75 %. Le corail ne reste que sur le point décoratif du logo.
+
+Pas encore fait : la zone `[splitRight]` (onglets Connexion / Créer un compte, `auth-form`, `password-field`).
