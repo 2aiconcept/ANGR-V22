@@ -8,38 +8,39 @@ Il décrit l'architecture **cible**. Ce qui est déjà créé dans le code est i
 
 ## 1. Principes
 
-- **Découpage par métier.** Chaque domaine métier (`auth`, `entreprises`, `contacts`, `opportunites`) a son propre dossier. Un service ou un modèle vit dans le dossier de **son** domaine, même si d'autres features l'utilisent : il ne déménage jamais dans `shared/` pour cette raison.
-- **`shared/` ne connaît aucun métier.** On n'y met que du générique (tableau, modale, pagination…), qui ne sait pas ce qu'est une entreprise ou une opportunité. Le code transverse lié à la mise en page est dans `layout/`.
-- **Trois dossiers par feature :**
-  - `data-access/` : le service qui appelle l'API et porte l'état du domaine, et les modèles du domaine ;
+- **Découpage par métier.** Chaque domaine métier (`auth`, `entreprises`, `contacts`, `opportunites`) a son propre dossier.
+- **Où ranger un élément** (modèle, service, composant) : utilisé par **une seule** feature, il reste dans le dossier de cette feature ; utilisé par **plus d'une** feature, il va dans `shared/` (ex. : `shared/utils/models/entreprise.ts`). On le déplace dès qu'une deuxième feature en a besoin.
+- **Aucune dépendance entre features.** Une feature n'importe rien d'une autre feature, seulement `shared/` et `layout/`. C'était déjà la règle avec les modules, et c'est ce qu'imposeront les contraintes de dépendances de Nx en formation avancée (une librairie par feature, sans interdépendance). Sur une grosse appli à plusieurs développeurs, chaque feature reste indépendante.
+- **`shared/` ne dépend d'aucune feature.** Il contient ce qui est commun à plusieurs features : composants (tableau, modale, pagination…), modèles, services. Le code transverse lié à la mise en page est dans `layout/`.
+- **Trois dossiers par feature (plus `utils/models/`) :**
+  - `data-access/` : le service qui appelle l'API et porte l'état du domaine ;
   - `smart-components/` : les pages routées, qui lisent l'état et orchestrent ;
-  - `dump-components/` (composants « dumb » ; le dossier s'écrit `dump` dans le projet) : les composants d'affichage, qui ne reçoivent que des `input()` et n'émettent que des `output()`. Aucun accès au service, aucun appel HTTP.
-- **Un smart component par page.** Seuls les smart components injectent des services : celui de leur feature, celui d'une autre feature ou celui de `shared/`. Ils croisent les données de plusieurs domaines si besoin (ex. : nombre d'opportunités par entreprise, voir 1.1), les passent aux dumb components et réagissent à leurs événements.
+  - `dump-components/` (composants « dumb » ; le dossier s'écrit `dump` dans le projet) : les composants d'affichage, qui ne reçoivent que des `input()` et n'émettent que des `output()`. Aucun accès au service, aucun appel HTTP ;
+  - `utils/models/` : les interfaces utilisées seulement par cette feature.
+- **Un smart component par page.** Seuls les smart components injectent des services : celui de leur feature ou ceux de `shared/`. Ils croisent les données si besoin, les passent aux dumb components et réagissent à leurs événements.
 - **Standalone, Signals, OnPush, zoneless.** Aucun `NgModule`. Contrôle de flux en `@if` / `@for` / `@switch`. Injection par `inject()`.
 - **Pas de composant sans comportement.** Un titre de page, un texte ou un simple conteneur se font en HTML avec des classes globales. Un composant n'est créé que s'il porte un comportement, ou un bloc réutilisé à plusieurs endroits.
-- **Réutilisation par contrat, pas par type.** Un composant de `shared/` ne connaît aucune entité métier : il ne sait pas ce qu'est une entreprise. Chaque page lui fournit ses données et, si besoin, ses templates.
 
 ### 1.1 Règles de dépendance
 
 | Qui | Peut importer | Ne peut pas importer |
 |---|---|---|
-| `<feature>/smart-components` | `data-access` de sa feature **et des autres features**, ses propres dumb, `shared/`, `layout/` | les composants (smart ou dumb) d'une autre feature |
-| `<feature>/dump-components` | les modèles (interfaces) de sa feature ou d'une autre (ex. : `opportunite-form` reçoit des `Entreprise[]`), `shared/` | aucun service, ni router ni HTTP |
-| `<feature>/data-access` | `HttpClient`, ses propres modèles | le service d'une autre feature |
-| `shared/` | rien du métier | aucune feature |
+| `<feature>/smart-components` | `data-access` et `utils/` de sa feature, ses propres dumb, `shared/`, `layout/` | quoi que ce soit d'une autre feature |
+| `<feature>/dump-components` | `utils/` de sa feature, `shared/` | aucun service, ni router ni HTTP ; rien d'une autre feature |
+| `<feature>/data-access` | `HttpClient`, `utils/` de sa feature, `shared/` | rien d'une autre feature |
+| `shared/` | `shared/` | aucune feature |
 
 ```
-entreprises/smart-components  ──►  opportunites/data-access   ✅ une page lit un autre domaine
-entreprises/data-access       ──►  opportunites/data-access   ❌ deux services liés entre eux
-shared/                       ──►  n'importe quelle feature    ❌ shared ne connaît pas le métier
-entreprises/smart-components  ──►  opportunites/dump-components ❌ casse le lazy loading
+entreprises/…                 ──►  shared/…                   ✅ une feature utilise ce qui est partagé
+entreprises/…                 ──►  opportunites/…             ❌ dépendance entre features : déplacer l'élément dans shared/
+shared/                       ──►  n'importe quelle feature    ❌ shared ne dépend d'aucune feature
 ```
 
-Comme un service ne dépend que de l'API, aucun cycle n'est possible. Le lazy loading reste efficace : le builder suit les `import`, pas les dossiers. Un service partagé par deux pages part dans un petit chunk commun, et les pages restent chacune dans leur chunk.
+Le graphe de dépendances reste un arbre : les features dépendent de `shared/`, jamais entre elles. Aucun cycle n'est possible, et le lazy loading reste efficace : le builder suit les `import`, pas les dossiers. Un élément de `shared/` utilisé par deux pages part dans un petit chunk commun, et les pages restent chacune dans leur chunk.
 
-Les services d'une feature ne sont **jamais fournis ni référencés dans `app.config.ts`** : ce fichier fait partie du bundle initial, et le service y serait chargé sur toutes les pages, `/connexion` comprise. `@Service()` suffit, car Angular le fournit à la demande.
+Les services ne sont **jamais fournis ni référencés dans `app.config.ts`** : ce fichier fait partie du bundle initial, et le service y serait chargé sur toutes les pages, `/connexion` comprise. `@Service()` suffit, car Angular le fournit à la demande.
 
-Exemple, le nombre d'opportunités par entreprise. L'API n'a pas d'endpoint dédié, mais chaque opportunité a un `entreprise_id`. `EntreprisesPage` injecte donc `EntreprisesService` et `OpportunitesService`, et compte avec un `computed()` :
+Exemple, le nombre d'opportunités par entreprise. L'API n'a pas d'endpoint dédié, mais chaque opportunité a un `entreprise_id`. Si `EntreprisesPage` a besoin des opportunités, `OpportunitesService` (et le modèle `Opportunite`) passent dans `shared/`, puisqu'ils servent alors à deux features. La page compte avec un `computed()` :
 
 ```ts
 protected readonly nbOpportunitesParEntreprise = computed(() => {
@@ -53,7 +54,9 @@ protected readonly nbOpportunitesParEntreprise = computed(() => {
 });
 ```
 
-Ces règles correspondent aux contraintes de modules de Nx (`feature` → `data-access` autorisé, `data-access` → `data-access` interdit), vues en formation Angular avancé.
+Ce calcul côté front ne passe pas à l'échelle avec une pagination serveur (voir section 10, étape 5).
+
+Ces règles correspondent aux contraintes de dépendances de Nx (`feature` → `shared` autorisé, `feature` → `feature` interdit), vues en formation Angular avancé.
 
 ---
 
@@ -509,11 +512,14 @@ Pas encore fait : la zone `[splitRight]` (onglets Connexion / Créer un compte, 
 | `layout/list-page-layout/` | fait, d'après l'écran 02 du design. Uniquement des classes Bootstrap, `.scss` vide. Dans l'ordre : `[pageHeader]` (titre à gauche, bouton à droite, alignés en bas), `[pageKpis]` (grille `row-cols-2 row-cols-lg-4` : chaque élément projeté devient une colonne), puis une carte blanche avec `[pageToolbar]` en en-tête, le contenu par défaut (le tableau) et `[pageFooter]` en pied (compteur à gauche, pagination à droite). Pas de `<main>` : il est déjà dans `AppShell` |
 | `entreprises/utils/models/entreprise.ts` | créé : interface `Entreprise` (voir `endpoints-et-donnees.md`, 1.2) identique à l'API, sans statut (voir 7.2) |
 | `contacts/utils/models/contact.ts` | créé : interface `Contact` (voir `endpoints-et-donnees.md`, 1.3). Pas utilisé pour l'instant : servira à la page Contacts |
-| `entreprises-page` | d'après l'écran 02 du design, **en statique** (aucun comportement). Signal `entreprises = signal<Entreprise[]>([...])` de 4 entreprises écrites en dur (celles de l'API) (pas encore de service ni d'API). Méthode `initiales(nom)`. Template dans `ListPageLayout` : `[pageHeader]` (`PageTitle`, `ButtonLarge` « Nouvelle entreprise », sans action), `[pageKpis]` vide (pas de carte de chiffres pour l'instant ; `shared/dump-components/stat-card` est gardé pour un éventuel dashboard), `[pageToolbar]` (champ de recherche, sans action), tableau à 4 colonnes (avatar d'initiales + nom + adresse, secteur, téléphone, bouton Modifier) avec `@for (… ; track entreprise.id)` et `@empty`, `[pageFooter]` (compteur et page 1). Le `.scss` ne fixe que la taille de l'avatar |
+| `entreprises-page` | d'après l'écran 02 du design, **en statique** (aucun comportement). Signal `entreprises = signal<Entreprise[]>([...])` de 4 entreprises écrites en dur (celles de l'API) (pas encore de service ni d'API). Méthode `initiales(nom)`. Template dans `ListPageLayout` : `[pageHeader]` (`PageTitle`, `ButtonLarge` « Nouvelle entreprise », sans action), `[pageKpis]` vide (pas de carte de chiffres pour l'instant ; `shared/dump-components/stat-card` est gardé pour un éventuel dashboard), `[pageToolbar]` (`SearchField`, pas encore branché sur un filtre), `<app-data-table legende="Liste des entreprises" [colonnes]="colonnes" [lignes]="entreprises()" />` avec `colonnes = ['nom', 'secteur', 'adresse', 'telephone']`, [pageFooter]` (`Paginator` ; la page découpe la liste : signal `pageCourante`, `computed()` `nbPages` et `entreprisesDeLaPage` avec `slice`, constante `TAILLE_PAGE = 10` ; pagination côté front, puisque l'API ne pagine pas). Le `.scss` ne fixe que la taille de l'avatar |
 
 Écarts avec le design (section 7.2) : pas de statut d'entreprise, car l'API n'en a pas. Pas de nombre de contacts par entreprise : avec une pagination côté serveur, le calcul côté front ne passe pas à l'échelle (il faudrait charger tous les contacts), et l'API ne fournit ni pagination ni compte. Tous les avatars sont en bleu marine clair : les couleurs variées du design viendront avec `AvatarInitials`.
+| `shared/dump-components/button-smal/` | fait : petit bouton bordé (`btn btn-sm border`). Inputs `symbole` (caché aux lecteurs d'écran), `texte`, `texteMasque` (lu seulement par les lecteurs d'écran, ex. : le nom de l'entreprise). Output `sender` au clic |
+| `shared/dump-components/search-field/` | fait : barre de recherche pour toutes les pages de liste. Inputs `libelle` (obligatoire, `<label>` masqué relié au champ), `placeholder`, `valeur`, `identifiant` (id du champ, unique dans la page, `'recherche'` par défaut). Output `recherche` : émet le texte à chaque frappe (`(input)` + variable de template `#champ`). `host: { class: 'flex-grow-1' }` pour prendre la largeur de la barre d'outils |
+| `shared/dump-components/paginator/` | fait : pied de tableau des pages de liste (compteur à gauche, numéros de page à droite). Inputs `nbElements`, `libelle` (fin de phrase accordée par la page : « entreprises affichées », « contacts affichés »…), `pageCourante`, `nbPages`. Output `changementPage` (numéro cliqué). Page courante en `btn-dark` avec `aria-current="page"`, compteur annoncé par `aria-live` |
+| `shared/dump-components/data-table/` | fait. Inputs `legende` (le `<caption>`), `colonnes` (`string[]`, noms des propriétés à afficher, aussi utilisés comme en-têtes) et `lignes` (collection non typée, `any[]`, pour servir à n'importe quelle collection). Un `@for` affiche les en-têtes, un second `@for` les lignes, avec `ligne[colonne]` dans chaque cellule. Dernière colonne (en-tête « Actions » masqué) : un `ButtonSmal` « Modifier » par ligne ; output `modifier` qui émet la ligne cliquée |
 | `shared/dump-components/page-title/` | créé : surtitre (`<p>`) et titre de page (`<h1>`). Inputs `sousTitre` et `titre`. Écart avec la règle « pas de composant sans comportement » (section 1 et `CLAUDE.md`) : gardé car réutilisé par les trois pages de liste, et premier exemple d'`input()` en formation. Comme tout élément projeté, il doit porter l'attribut de sa zone : `<app-page-title pageHeader … />` |
 | `shared/dump-components/button-large/` | créé : bouton d'action principal (majuscules, ombre). Inputs `symbole` (affiché mais caché aux lecteurs d'écran), `texte`, `couleur` (`'primary' \| 'secondary' \| 'dark'`, `'primary'` par défaut), appliquée par `[class]="'btn-' + couleur()"` en plus des classes fixes. Output `sender` (`output<void>()`), émis au clic : c'est la page qui décide quoi faire |
 | `src/styles.scss` | ajout de `$card-bg`, `$card-cap-bg`, `$table-bg` à `#fff` : dans Bootstrap 5.3, ils valent par défaut le fond de la page (gris), et les cartes et tableaux ne se détachaient pas |
 
-Écart avec la cible (section 1) : les modèles d'une feature sont dans `<feature>/utils/models/`, et non dans `data-access/`.

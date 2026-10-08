@@ -1,1 +1,4 @@
-<p>button-smal works!</p>
+<button type="button" class="btn btn-sm border text-dark text-nowrap" (click)="sender.emit()">
+  <span aria-hidden="true">{{ symbole() }}</span> {{ texte() }}
+  <span class="visually-hidden">{{ texteMasque() }}</span>
+</button>

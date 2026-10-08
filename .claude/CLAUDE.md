@@ -65,11 +65,12 @@ src/app/<feature>/
 
 Le dossier s'appelle `dump-components` (et non `dumb-`) dans le code : garde-le tel quel.
 
-- **Découpage par métier** : un service ou un modèle vit dans le dossier de son domaine, même s'il est utilisé par d'autres features. Ne le déplace jamais dans `shared/` pour cette raison.
-- **`shared/`** : uniquement du générique, qui ne connaît aucune entité métier. N'importe aucune feature.
-- **Smart** (`*-page`) : seuls composants à injecter des services, ceux de leur feature, d'une autre feature ou de `shared/`. Croisent les données de plusieurs domaines si besoin, les passent aux dumb et réagissent à leurs événements.
+- **Où ranger un élément** (modèle, service, composant) : utilisé par **une seule** feature, il reste dans le dossier de cette feature ; utilisé par **plus d'une** feature, il va dans `shared/` (ex. : `shared/utils/models/entreprise.ts`). On le déplace dans `shared/` dès qu'une deuxième feature en a besoin.
+- **Aucune dépendance entre features** : une feature n'importe jamais rien d'une autre feature, seulement de `shared/` et `layout/`. Comme pour les modules autrefois, et pour respecter plus tard les contraintes de dépendances de Nx (une librairie par feature, sans interdépendance).
+- **`shared/`** : n'importe jamais une feature.
+- **Smart** (`*-page`) : seuls composants à injecter des services, ceux de leur feature ou de `shared/`. Croisent les données si besoin, les passent aux dumb et réagissent à leurs événements.
 - **Dumb** : aucun service, aucun router, aucun HTTP. Reçoit via `input()`, émet via `output()`.
-- **Service** : n'injecte jamais le service d'une autre feature. Jamais fourni ni référencé dans `app.config.ts` (bundle initial) : `@Service()` suffit.
+- **Service** : n'injecte jamais le service d'une autre feature (s'il en a besoin, ce service partagé va dans `shared/`). Jamais fourni ni référencé dans `app.config.ts` (bundle initial) : `@Service()` suffit.
 - On n'importe jamais un composant (smart ou dumb) d'une autre feature. Règles complètes : `documentation.md`, section 1.1.
 - Pas de composant sans comportement : un titre ou un conteneur simple reste du HTML.
 
@@ -117,7 +118,7 @@ Pas de `NgModule`.
 - Booléens nommés comme des questions : `isLogged`, `hasError`.
 - Une responsabilité par fichier, par composant, par fonction.
 - Pas de code mort, pas de `console.log` laissé, pas de valeurs magiques (constantes nommées).
-- Typage strict : pas de `any`. Interfaces/types des entités dans `data-access/`.
+- Typage strict : pas de `any`. Interfaces/types des entités dans `<feature>/utils/models/`, ou dans `shared/utils/models/` si plusieurs features les utilisent.
 - `readonly` sur les propriétés qui ne sont pas réassignées, `protected` pour ce qui n'est utilisé que par le template.
 - Retours anticipés plutôt que des `if` imbriqués.
 

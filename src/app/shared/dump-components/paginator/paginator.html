@@ -1,1 +1,16 @@
-<p>paginator works!</p>
+<p class="mb-0" aria-live="polite">{{ nbElements() }} {{ libelle() }}</p>
+
+<nav aria-label="Pagination" class="d-flex gap-2">
+  @for (page of pages(); track page) {
+    <button
+      type="button"
+      class="btn btn-sm"
+      [class.btn-dark]="page === pageCourante()"
+      [class.border]="page !== pageCourante()"
+      [attr.aria-current]="page === pageCourante() ? 'page' : null"
+      (click)="changementPage.emit(page)"
+    >
+      <span class="visually-hidden">Page</span> {{ page }}
+    </button>
+  }
+</nav>

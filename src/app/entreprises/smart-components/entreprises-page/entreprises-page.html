@@ -3,66 +3,21 @@
 
   <app-button-large pageHeader symbole="+" texte="nouvelle entreprise" (sender)="addEntreprise()" />
 
-  <div pageToolbar class="input-group flex-grow-1 w-auto">
-    <span class="input-group-text bg-body text-body-tertiary" aria-hidden="true">⌕</span>
-    <label class="visually-hidden" for="recherche-entreprise">Rechercher une entreprise</label>
-    <input
-      id="recherche-entreprise"
-      type="search"
-      class="form-control bg-body border-start-0 ps-0"
-      placeholder="Rechercher une entreprise, un secteur…"
-    />
-  </div>
+  <app-search-field
+    pageToolbar
+    identifiant="recherche-entreprise"
+    libelle="Rechercher une entreprise"
+    placeholder="Rechercher une entreprise, un secteur…"
+  />
 
-  <table class="table table-hover align-middle mb-0">
-    <caption class="visually-hidden">
-      Liste des entreprises
-    </caption>
-    <thead>
-      <tr class="small text-uppercase">
-        <th scope="col" class="px-4 bg-body-tertiary text-body-tertiary">Entreprise</th>
-        <th scope="col" class="bg-body-tertiary text-body-tertiary">Secteur</th>
-        <th scope="col" class="bg-body-tertiary text-body-tertiary">Téléphone</th>
-        <th scope="col" class="px-4 bg-body-tertiary">
-          <span class="visually-hidden">Actions</span>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (entreprise of entreprises(); track entreprise.id) {
-        <tr>
-          <td class="px-4">
-            <div class="d-flex align-items-center gap-3">
-              <span
-                class="avatar d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-3 fw-bold bg-dark-subtle text-dark-emphasis"
-                aria-hidden="true"
-                >{{ initiales(entreprise.nom) }}</span
-              >
-              <div>
-                <p class="mb-0 fw-semibold text-dark">{{ entreprise.nom }}</p>
-                <p class="mb-0 small text-body-tertiary">{{ entreprise.adresse }}</p>
-              </div>
-            </div>
-          </td>
-          <td class="text-body-secondary">{{ entreprise.secteur }}</td>
-          <td class="text-body-secondary">{{ entreprise.telephone }}</td>
-          <td class="px-4 text-end">
-            <button type="button" class="btn btn-sm border text-dark text-nowrap">
-              <span aria-hidden="true">✎</span> Modifier
-              <span class="visually-hidden">{{ entreprise.nom }}</span>
-            </button>
-          </td>
-        </tr>
-      } @empty {
-        <tr>
-          <td colspan="4" class="px-4 py-4 text-center text-body-secondary">Aucune entreprise.</td>
-        </tr>
-      }
-    </tbody>
-  </table>
+  <app-data-table legende="Liste des entreprises" [colonnes]="colonnes" [lignes]="entreprisesDeLaPage()" />
 
-  <p pageFooter class="mb-0">{{ entreprises().length }} entreprises affichées</p>
-  <nav pageFooter aria-label="Pagination">
-    <button type="button" class="btn btn-sm btn-dark" aria-current="page">1</button>
-  </nav>
+  <app-paginator
+    pageFooter
+    [nbElements]="entreprises().length"
+    libelle="entreprises affichées"
+    [pageCourante]="pageCourante()"
+    [nbPages]="nbPages()"
+    (changementPage)="pageCourante.set($event)"
+  />
 </app-list-page-layout>

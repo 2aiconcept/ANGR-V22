@@ -1,1 +1,13 @@
-<p>search-field works!</p>
+<div class="input-group">
+  <span class="input-group-text bg-body text-body-tertiary" aria-hidden="true">⌕</span>
+  <label class="visually-hidden" [for]="identifiant()">{{ libelle() }}</label>
+  <input
+    #champ
+    [id]="identifiant()"
+    type="search"
+    class="form-control bg-body border-start-0 ps-0"
+    [placeholder]="placeholder()"
+    [value]="valeur()"
+    (input)="recherche.emit(champ.value)"
+  />
+</div>

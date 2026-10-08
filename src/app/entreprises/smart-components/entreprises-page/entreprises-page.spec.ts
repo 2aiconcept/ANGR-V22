@@ -28,12 +28,4 @@ describe('EntreprisesPage', () => {
 
     expect(page.textContent).toContain('4 entreprises affichées');
   });
-
-  it("affiche l'initiale de l'entreprise dans l'avatar", async () => {
-    const page = await afficher();
-
-    const avatar = page.querySelector('tbody tr td span');
-
-    expect(avatar?.textContent?.trim()).toBe('T');
-  });
 });

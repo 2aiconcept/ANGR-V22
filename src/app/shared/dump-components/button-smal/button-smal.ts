@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   imports: [],
@@ -6,4 +6,11 @@ import { Component } from '@angular/core';
   styleUrl: './button-smal.scss',
   templateUrl: './button-smal.html',
 })
-export class ButtonSmal {}
+export class ButtonSmal {
+  readonly symbole = input<string>('');
+  readonly texte = input<string>('');
+  // Lu seulement par les lecteurs d'écran : précise le bouton (ex. : « Modifier TechVision »).
+  readonly texteMasque = input<string>('');
+
+  readonly sender = output<void>();
+}

@@ -1,1 +1,32 @@
-<p>data-table works!</p>
+<table class="table table-hover align-middle mb-0">
+  <caption class="visually-hidden">{{ legende() }}</caption>
+  <thead>
+    <tr class="small text-uppercase">
+      @for (colonne of colonnes(); track colonne) {
+        <th scope="col" class="bg-body-tertiary text-body-tertiary" [class.px-4]="$first">
+          {{ colonne }}
+        </th>
+      }
+      <th scope="col" class="px-4 bg-body-tertiary">
+        <span class="visually-hidden">Actions</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (ligne of lignes(); track $index) {
+      <tr>
+        @for (colonne of colonnes(); track colonne) {
+          <td [class.px-4]="$first">{{ ligne[colonne] }}</td>
+        }
+        <td class="px-4 text-end">
+          <app-button-smal
+            symbole="✎"
+            texte="Modifier"
+            [texteMasque]="ligne[colonnes()[0]]"
+            (sender)="modifier.emit(ligne)"
+          />
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
