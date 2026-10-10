@@ -1,21 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { AppShell } from './app-shell';
 
 describe('AppShell', () => {
-  let component: AppShell;
-  let fixture: ComponentFixture<AppShell>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppShell],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(AppShell);
-    component = fixture.componentInstance;
+  async function afficher(): Promise<HTMLElement> {
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
+    const fixture = TestBed.createComponent(AppShell);
     await fixture.whenStable();
-  });
+    return fixture.nativeElement;
+  }
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it("affiche l'en-tête au-dessus de la zone principale", async () => {
+    const shell = await afficher();
+
+    const entete = shell.querySelector('header');
+    const main = shell.querySelector('main');
+
+    expect(entete).not.toBeNull();
+    expect(main).not.toBeNull();
+    expect(main?.contains(entete)).toBe(false);
   });
 });

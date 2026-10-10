@@ -1,0 +1,10 @@
+[     204ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/C:/Users/chris/01-FORMATIONS/ANGR/angr-v22/.angular/cache/22.2.1/angr-v22/vite/deps/core-Dl1ZlCfZ.js?v=3557e222:13455
+[     267ms] [LOG] pagecourante 1 @ http://localhost:4200/chunk-RYDE7T47.js:534
+[     268ms] [LOG] nb pages 2 @ http://localhost:4200/chunk-RYDE7T47.js:535
+[  114905ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/C:/Users/chris/01-FORMATIONS/ANGR/angr-v22/.angular/cache/22.2.1/angr-v22/vite/deps/core-Dl1ZlCfZ.js?v=3557e222:13455
+[  114942ms] [LOG] pagecourante 1 @ http://localhost:4200/chunk-RYDE7T47.js:534
+[  114942ms] [LOG] nb pages 2 @ http://localhost:4200/chunk-RYDE7T47.js:535
+[ 1154449ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:4200/@vite/client:1030
+[ 1441146ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/C:/Users/chris/01-FORMATIONS/ANGR/angr-v22/.angular/cache/22.2.1/angr-v22/vite/deps/core-Dl1ZlCfZ.js?v=3557e222:13455
+[ 1441358ms] [LOG] pagecourante 1 @ http://localhost:4200/chunk-RYDE7T47.js:534
+[ 1441360ms] [LOG] nb pages 2 @ http://localhost:4200/chunk-RYDE7T47.js:535
