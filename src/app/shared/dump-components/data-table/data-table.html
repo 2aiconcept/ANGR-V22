@@ -1,5 +1,9 @@
 <table class="table table-hover align-middle mb-0">
-  <caption class="visually-hidden">{{ legende() }}</caption>
+  <caption class="visually-hidden">
+    {{
+      legende()
+    }}
+  </caption>
   <thead>
     <tr class="small text-uppercase">
       @for (colonne of colonnes(); track colonne) {
@@ -21,9 +25,10 @@
         <td class="px-4 text-end">
           <app-button-smal
             symbole="✎"
+            // caractere unicode &#9998;
             texte="Modifier"
             [texteMasque]="ligne[colonnes()[0]]"
-            (sender)="modifier.emit(ligne)"
+            (click)="modifier.emit(ligne)"
           />
         </td>
       </tr>

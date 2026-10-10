@@ -10,7 +10,12 @@
     placeholder="Rechercher une entreprise, un secteur…"
   />
 
-  <app-data-table legende="Liste des entreprises" [colonnes]="colonnes" [lignes]="entreprisesDeLaPage()" />
+  <app-data-table 
+    legende="Liste des entreprises" 
+    [colonnes]="colonnes" 
+    [lignes]="entreprisesDeLaPage()" 
+    (modifier)="modifierEntreprise($event)" 
+  />
 
   <app-paginator
     pageFooter

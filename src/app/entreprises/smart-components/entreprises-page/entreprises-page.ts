@@ -48,6 +48,62 @@ export class EntreprisesPage {
       adresse: '3 place Bellecour, 69002 Lyon',
       telephone: '04 78 90 12 00',
     },
+    {
+      id: 1,
+      nom: 'TechVision',
+      secteur: 'IT & Cloud',
+      adresse: "12 rue de l'Innovation, 75011 Paris",
+      telephone: '01 45 67 89 00',
+    },
+    {
+      id: 2,
+      nom: 'StratConseil',
+      secteur: 'Conseil',
+      adresse: '8 avenue Foch, 69006 Lyon',
+      telephone: '04 72 33 45 00',
+    },
+    {
+      id: 3,
+      nom: 'ShopNow',
+      secteur: 'E-commerce',
+      adresse: '25 quai des Chartrons, 33000 Bordeaux',
+      telephone: '05 56 12 34 00',
+    },
+    {
+      id: 4,
+      nom: 'FinFlow',
+      secteur: 'Fintech',
+      adresse: '3 place Bellecour, 69002 Lyon',
+      telephone: '04 78 90 12 00',
+    },
+    {
+      id: 1,
+      nom: 'TechVision',
+      secteur: 'IT & Cloud',
+      adresse: "12 rue de l'Innovation, 75011 Paris",
+      telephone: '01 45 67 89 00',
+    },
+    {
+      id: 2,
+      nom: 'StratConseil',
+      secteur: 'Conseil',
+      adresse: '8 avenue Foch, 69006 Lyon',
+      telephone: '04 72 33 45 00',
+    },
+    {
+      id: 3,
+      nom: 'ShopNow',
+      secteur: 'E-commerce',
+      adresse: '25 quai des Chartrons, 33000 Bordeaux',
+      telephone: '05 56 12 34 00',
+    },
+    {
+      id: 4,
+      nom: 'FinFlow',
+      secteur: 'Fintech',
+      adresse: '3 place Bellecour, 69002 Lyon',
+      telephone: '04 78 90 12 00',
+    },
   ]);
 
   protected readonly pageCourante = signal(1);
@@ -73,5 +129,9 @@ export class EntreprisesPage {
 
   addEntreprise() {
     console.log('add entreprise clicked');
+  }
+
+  protected modifierEntreprise(entreprise: Entreprise): void {
+    console.log(entreprise);
   }
 }

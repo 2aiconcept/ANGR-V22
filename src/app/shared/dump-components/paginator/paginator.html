@@ -8,7 +8,7 @@
       [class.btn-dark]="page === pageCourante()"
       [class.border]="page !== pageCourante()"
       [attr.aria-current]="page === pageCourante() ? 'page' : null"
-      (click)="changementPage.emit(page)"
+      (click)="changePage(page)"
     >
       <span class="visually-hidden">Page</span> {{ page }}
     </button>
