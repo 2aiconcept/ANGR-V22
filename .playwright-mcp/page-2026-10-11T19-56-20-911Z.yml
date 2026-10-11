@@ -1,0 +1,46 @@
+- generic [ref=f18e3]:
+  - banner [ref=f18e5]:
+    - link "liane" [ref=f18e6] [cursor=pointer]:
+      - /url: /entreprises
+      - generic [aria-hidden] [ref=f18e7]: l
+      - generic [ref=f18e8]: liane.
+    - navigation "Navigation principale" [ref=f18e10]:
+      - list [ref=f18e11]:
+        - listitem [ref=f18e12]:
+          - link "Entreprises" [ref=f18e13] [cursor=pointer]:
+            - /url: /entreprises
+        - listitem [ref=f18e14]:
+          - link "Contacts" [ref=f18e15] [cursor=pointer]:
+            - /url: /contacts
+        - listitem [ref=f18e16]:
+          - link "Opportunités" [ref=f18e17] [cursor=pointer]:
+            - /url: /opportunites
+  - main [ref=f18e18]:
+    - generic [ref=f18e21]:
+      - generic [ref=f18e22]:
+        - generic [ref=f18e24]:
+          - paragraph [ref=f18e25]: Portefeuille commercial
+          - heading "Entreprises" [level=1] [ref=f18e26]
+        - button "nouvelle entreprise" [ref=f18e28] [cursor=pointer]: + nouvelle entreprise
+      - generic [ref=f18e29]:
+        - generic [ref=f18e32]:
+          - generic [aria-hidden] [ref=f18e33]: ⌕
+          - generic [ref=f18e34]: Rechercher une entreprise
+          - searchbox "Rechercher une entreprise" [ref=f18e35]
+        - paragraph [ref=f18e37]: Chargement des entreprises…
+        - table [ref=f18e39]:
+          - caption [ref=f18e40]: Liste des entreprises
+          - rowgroup [ref=f18e41]:
+            - row [ref=f18e42]:
+              - columnheader "nom" [ref=f18e43]
+              - columnheader "secteur" [ref=f18e44]
+              - columnheader "adresse" [ref=f18e45]
+              - columnheader "telephone" [ref=f18e46]
+              - columnheader "Actions" [ref=f18e47]
+          - rowgroup
+        - generic [ref=f18e50]:
+          - paragraph [ref=f18e51]: 0 entreprises affichées
+          - navigation "Pagination" [ref=f18e52]:
+            - button "Page 1" [ref=f18e53] [cursor=pointer]:
+              - generic [ref=f18e54]: Page
+              - text: "1"

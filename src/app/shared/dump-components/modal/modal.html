@@ -1,1 +1,17 @@
-<p>modal works!</p>
+<!-- (close) est émis par le navigateur pour toutes les fermetures : bouton, Échap, clic sur le fond -->
+<dialog
+  #dialog
+  class="modale border-0 rounded-4 p-0 bg-white shadow"
+  [attr.aria-labelledby]="identifiant() + '-titre'"
+  (close)="fermeture.emit()"
+  (click)="fermerSiClicSurLeFond($event)"
+>
+  <header class="d-flex align-items-center justify-content-between gap-3 px-4 pt-4">
+    <h2 class="h5 mb-0" [id]="identifiant() + '-titre'">{{ titre() }}</h2>
+    <button type="button" class="btn-close" aria-label="Fermer" (click)="fermer()"></button>
+  </header>
+
+  <div class="p-4">
+    <ng-content />
+  </div>
+</dialog>

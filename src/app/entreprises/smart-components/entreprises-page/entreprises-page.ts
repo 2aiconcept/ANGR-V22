@@ -8,6 +8,7 @@ import { DataTable } from '../../../shared/dump-components/data-table/data-table
 import { SearchField } from '../../../shared/dump-components/search-field/search-field';
 import { Paginator } from '../../../shared/dump-components/paginator/paginator';
 import { SidePanel } from '../../../shared/dump-components/side-panel/side-panel';
+import { Modal } from '../../../shared/dump-components/modal/modal';
 import { EntrepriseForm } from '../../dump-components/entreprise-form/entreprise-form';
 
 const TAILLE_PAGE = 10;
@@ -22,6 +23,7 @@ const TAILLE_PAGE = 10;
     Paginator,
     SidePanel,
     EntrepriseForm,
+    Modal,
   ],
   selector: 'app-entreprises-page',
   styleUrl: './entreprises-page.scss',
@@ -96,5 +98,28 @@ export class EntreprisesPage {
   private ouvrirPanneau(): void {
     this.hasErrorEnregistrement.set(false);
     this.isPanneauOuvert.set(true);
+  }
+
+  // étape 4 : suppression __________________________________________________________
+  // null : modale fermée. Une entreprise : la modale demande de confirmer sa suppression.
+  protected readonly entrepriseASupprimer = signal<Entreprise | null>(null);
+  protected readonly hasErrorSuppression = signal(false);
+
+  protected supprimerEntreprise(entreprise: Entreprise): void {
+    this.hasErrorSuppression.set(false);
+    this.entrepriseASupprimer.set(entreprise);
+  }
+
+  protected fermerModale(): void {
+    this.entrepriseASupprimer.set(null);
+  }
+
+  protected async confirmerSuppression(entreprise: Entreprise): Promise<void> {
+    this.fermerModale();
+    try {
+      await this.entreprisesService.supprimer(entreprise.id);
+    } catch {
+      this.hasErrorSuppression.set(true);
+    }
   }
 }

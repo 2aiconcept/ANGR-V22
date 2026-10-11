@@ -16,4 +16,5 @@ export class DataTable {
   readonly colonneAvatar = input<string>();
 
   readonly modifier = output<any>();
+  readonly supprimer = output<any>();
 }

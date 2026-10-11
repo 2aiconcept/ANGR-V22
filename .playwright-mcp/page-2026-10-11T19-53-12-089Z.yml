@@ -1,0 +1,120 @@
+- generic [ref=f15e3]:
+  - banner [ref=f15e5]:
+    - link "liane" [ref=f15e6] [cursor=pointer]:
+      - /url: /entreprises
+      - generic [aria-hidden] [ref=f15e7]: l
+      - generic [ref=f15e8]: liane.
+    - navigation "Navigation principale" [ref=f15e10]:
+      - list [ref=f15e11]:
+        - listitem [ref=f15e12]:
+          - link "Entreprises" [ref=f15e13] [cursor=pointer]:
+            - /url: /entreprises
+        - listitem [ref=f15e14]:
+          - link "Contacts" [ref=f15e15] [cursor=pointer]:
+            - /url: /contacts
+        - listitem [ref=f15e16]:
+          - link "Opportunités" [ref=f15e17] [cursor=pointer]:
+            - /url: /opportunites
+  - main [ref=f15e18]:
+    - generic [ref=f15e21]:
+      - generic [ref=f15e22]:
+        - generic [ref=f15e24]:
+          - paragraph [ref=f15e25]: Portefeuille commercial
+          - heading "Entreprises" [level=1] [ref=f15e26]
+        - button "nouvelle entreprise" [ref=f15e28] [cursor=pointer]: + nouvelle entreprise
+      - generic [ref=f15e29]:
+        - generic [ref=f15e32]:
+          - generic [aria-hidden] [ref=f15e33]: ⌕
+          - generic [ref=f15e34]: Rechercher une entreprise
+          - searchbox "Rechercher une entreprise" [ref=f15e35]
+        - table [ref=f15e39]:
+          - caption [ref=f15e40]: Liste des entreprises
+          - rowgroup [ref=f15e41]:
+            - row [ref=f15e42]:
+              - columnheader "nom" [ref=f15e43]
+              - columnheader "secteur" [ref=f15e44]
+              - columnheader "adresse" [ref=f15e45]
+              - columnheader "telephone" [ref=f15e46]
+              - columnheader "Actions" [ref=f15e47]
+          - rowgroup [ref=f15e55]:
+            - row [ref=f15e56]:
+              - cell "TechVision" [ref=f15e57]:
+                - generic [ref=f15e58]:
+                  - generic [aria-hidden] [ref=f15e60]: T
+                  - generic [ref=f15e61]: TechVision
+              - cell "IT & Cloud" [ref=f15e62]
+              - cell "12 rue de l'Innovation, 75011 Parisss" [ref=f15e63]
+              - cell "01 45 67 89 00" [ref=f15e64]
+              - cell [ref=f15e65]:
+                - button "Modifier TechVision" [ref=f15e67] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=f15e68]: TechVision
+                - button "Supprimer TechVision" [ref=f15e70] [cursor=pointer]:
+                  - text: ✕ Supprimer
+                  - generic [ref=f15e71]: TechVision
+            - row [ref=f15e72]:
+              - cell "StratConseil" [ref=f15e73]:
+                - generic [ref=f15e74]:
+                  - generic [aria-hidden] [ref=f15e76]: S
+                  - generic [ref=f15e77]: StratConseil
+              - cell "Conseil" [ref=f15e78]
+              - cell "8 avenue Foch, 69006 Lyon" [ref=f15e79]
+              - cell "04 72 33 45 00" [ref=f15e80]
+              - cell [ref=f15e81]:
+                - button "Modifier StratConseil" [ref=f15e83] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=f15e84]: StratConseil
+                - button "Supprimer StratConseil" [ref=f15e86] [cursor=pointer]:
+                  - text: ✕ Supprimer
+                  - generic [ref=f15e87]: StratConseil
+            - row [ref=f15e88]:
+              - cell "ShopNow" [ref=f15e89]:
+                - generic [ref=f15e90]:
+                  - generic [aria-hidden] [ref=f15e92]: S
+                  - generic [ref=f15e93]: ShopNow
+              - cell "E-commerce" [ref=f15e94]
+              - cell "25 quai des Chartrons, 33000 Bordeaux" [ref=f15e95]
+              - cell "05 56 12 34 00" [ref=f15e96]
+              - cell [ref=f15e97]:
+                - button "Modifier ShopNow" [ref=f15e99] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=f15e100]: ShopNow
+                - button "Supprimer ShopNow" [ref=f15e102] [cursor=pointer]:
+                  - text: ✕ Supprimer
+                  - generic [ref=f15e103]: ShopNow
+            - row [ref=f15e104]:
+              - cell "FinFlow" [ref=f15e105]:
+                - generic [ref=f15e106]:
+                  - generic [aria-hidden] [ref=f15e108]: F
+                  - generic [ref=f15e109]: FinFlow
+              - cell "Fintech" [ref=f15e110]
+              - cell "3 place Bellecour, 69002 Lyon" [ref=f15e111]
+              - cell "04 78 90 12 00" [ref=f15e112]
+              - cell [ref=f15e113]:
+                - button "Modifier FinFlow" [ref=f15e115] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=f15e116]: FinFlow
+                - button "Supprimer FinFlow" [ref=f15e118] [cursor=pointer]:
+                  - text: ✕ Supprimer
+                  - generic [ref=f15e119]: FinFlow
+            - row [ref=f15e120]:
+              - cell "test" [ref=f15e121]:
+                - generic [ref=f15e122]:
+                  - generic [aria-hidden] [ref=f15e124]: T
+                  - generic [ref=f15e125]: test
+              - cell "IT & Cloud" [ref=f15e126]
+              - cell "International House, 6 Eamer Crescent" [ref=f15e127]
+              - cell "+44656858433" [ref=f15e128]
+              - cell [ref=f15e129]:
+                - button "Modifier test" [ref=f15e131] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=f15e132]: test
+                - button "Supprimer test" [ref=f15e134] [cursor=pointer]:
+                  - text: ✕ Supprimer
+                  - generic [ref=f15e135]: test
+        - generic [ref=f15e50]:
+          - paragraph [ref=f15e51]: 5 entreprises affichées
+          - navigation "Pagination" [ref=f15e52]:
+            - button "Page 1" [ref=f15e53] [cursor=pointer]:
+              - generic [ref=f15e54]: Page
+              - text: "1"

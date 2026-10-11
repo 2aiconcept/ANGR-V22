@@ -31,13 +31,20 @@
             }
           </td>
         }
-        <td class="px-4 text-end">
+        <td class="px-4 text-end text-nowrap">
           <app-button-smal
             symbole="✎"
             // caractere unicode &#9998;
             texte="Modifier"
             [texteMasque]="ligne[colonnes()[0]]"
             (click)="modifier.emit(ligne)"
+          />
+          <app-button-smal
+            class="ms-2"
+            symbole="✕"
+            texte="Supprimer"
+            [texteMasque]="ligne[colonnes()[0]]"
+            (click)="supprimer.emit(ligne)"
           />
         </td>
       </tr>

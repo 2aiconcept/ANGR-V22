@@ -22,12 +22,19 @@
     </div>
   }
 
+  @if (hasErrorSuppression()) {
+    <div class="alert alert-danger m-3" role="alert">
+      La suppression a échoué. Réessayez plus tard.
+    </div>
+  }
+
   <app-data-table
     legende="Liste des entreprises" 
     [colonnes]="colonnes" 
     [lignes]="entreprisesDeLaPage()"
     colonneAvatar="nom"
     (modifier)="modifierEntreprise($event)" 
+    (supprimer)="supprimerEntreprise($event)"
   />
 
   <app-paginator
@@ -59,4 +66,20 @@
       (annuler)="fermerPanneau()"
     />
   </app-side-panel>
+}
+
+<!-- Confirmation de la suppression -->
+@if (entrepriseASupprimer(); as entreprise) {
+  <app-modal identifiant="modale-suppression" titre="Supprimer l’entreprise" (fermeture)="fermerModale()">
+    <p>
+      Voulez-vous vraiment supprimer <strong>{{ entreprise.nom }}</strong> ? Cette action est
+      définitive.
+    </p>
+    <div class="d-flex justify-content-end gap-2">
+      <button type="button" class="btn border text-dark" (click)="fermerModale()">Annuler</button>
+      <button type="button" class="btn btn-danger" (click)="confirmerSuppression(entreprise)">
+        Supprimer
+      </button>
+    </div>
+  </app-modal>
 }

@@ -32,7 +32,10 @@ describe('DataTable', () => {
     let ligneEmise: unknown;
     fixture.componentInstance.modifier.subscribe((ligne) => (ligneEmise = ligne));
 
-    fixture.nativeElement.querySelectorAll('tbody button')[1].click();
+    const boutons: HTMLButtonElement[] = Array.from(
+      fixture.nativeElement.querySelectorAll('tbody tr:nth-child(2) button'),
+    );
+    boutons.find((bouton) => bouton.textContent?.includes('Modifier'))?.click();
 
     expect(ligneEmise).toEqual({ nom: 'Beta', ville: 'Paris' });
   });
@@ -74,5 +77,18 @@ describe('DataTable', () => {
 
     expect(avatars.length).toBe(2);
     expect(avatars[1].textContent.trim()).toBe('B');
+  });
+
+  it('émet supprimer avec la ligne quand on clique sur son bouton Supprimer', async () => {
+    const fixture = await creer();
+    let ligneEmise: unknown;
+    fixture.componentInstance.supprimer.subscribe((ligne) => (ligneEmise = ligne));
+
+    const boutons: HTMLButtonElement[] = Array.from(
+      fixture.nativeElement.querySelectorAll('tbody tr:first-child button'),
+    );
+    boutons.find((bouton) => bouton.textContent?.includes('Supprimer'))?.click();
+
+    expect(ligneEmise).toEqual({ nom: 'Alpha', ville: 'Lyon' });
   });
 });

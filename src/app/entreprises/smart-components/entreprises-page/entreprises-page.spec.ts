@@ -38,6 +38,13 @@ function creerFauxService(
     async modifier(id: number, valeurs: EntrepriseInput) {
       this.modifications.push({ id, valeurs });
     },
+    suppressions: [] as number[],
+    async supprimer(id: number) {
+      if (this.isApiEnErreur) {
+        throw new Error('404');
+      }
+      this.suppressions.push(id);
+    },
   };
 }
 
@@ -161,5 +168,62 @@ describe('EntreprisesPage', () => {
     expect(page.querySelector('dialog [role="alert"]')?.textContent).toContain(
       "L'enregistrement a échoué",
     );
+  });
+
+  describe('suppression', () => {
+    async function demanderLaSuppression(fauxService: ReturnType<typeof creerFauxService>) {
+      const { fixture, page } = await afficher(fauxService);
+      bouton(page, 'Supprimer Entreprise 2').click();
+      await fixture.whenStable();
+      return { fixture, page };
+    }
+
+    function boutonDeLaModale(page: HTMLElement, texte: string): HTMLButtonElement {
+      return Array.from(page.querySelectorAll<HTMLButtonElement>('dialog button')).find(
+        (b) => b.textContent?.trim() === texte,
+      ) as HTMLButtonElement;
+    }
+
+    it("ouvre une modale qui nomme l'entreprise à supprimer", async () => {
+      const { page } = await demanderLaSuppression(creerFauxService(creerEntreprises(2)));
+
+      expect(page.querySelector('dialog h2')?.textContent).toBe('Supprimer l’entreprise');
+      expect(page.querySelector('dialog')?.textContent).toContain('Entreprise 2');
+    });
+
+    it("supprime l'entreprise si l'utilisateur confirme, puis ferme la modale", async () => {
+      const fauxService = creerFauxService(creerEntreprises(2));
+      const { fixture, page } = await demanderLaSuppression(fauxService);
+
+      boutonDeLaModale(page, 'Supprimer').click();
+      await fixture.whenStable();
+
+      expect(fauxService.suppressions).toEqual([2]);
+      expect(page.querySelector('dialog')).toBeNull();
+    });
+
+    it("ne supprime rien si l'utilisateur annule", async () => {
+      const fauxService = creerFauxService(creerEntreprises(2));
+      const { fixture, page } = await demanderLaSuppression(fauxService);
+
+      boutonDeLaModale(page, 'Annuler').click();
+      await fixture.whenStable();
+
+      expect(fauxService.suppressions).toEqual([]);
+      expect(page.querySelector('dialog')).toBeNull();
+    });
+
+    it("affiche une alerte si l'API refuse la suppression", async () => {
+      const fauxService = creerFauxService(creerEntreprises(2));
+      fauxService.isApiEnErreur = true;
+      const { fixture, page } = await demanderLaSuppression(fauxService);
+
+      boutonDeLaModale(page, 'Supprimer').click();
+      await fixture.whenStable();
+
+      expect(page.querySelector('[role="alert"]')?.textContent).toContain(
+        'La suppression a échoué',
+      );
+    });
   });
 });

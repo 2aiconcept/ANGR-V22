@@ -1,0 +1,9 @@
+// Le navigateur centre déjà un <dialog> : on fixe seulement sa largeur.
+.modale {
+  width: min(28rem, calc(100% - 2rem));
+}
+
+// Fond grisé derrière la modale
+.modale::backdrop {
+  background-color: rgba(var(--bs-dark-rgb), 0.5);
+}
