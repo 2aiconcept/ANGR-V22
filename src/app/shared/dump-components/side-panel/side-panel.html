@@ -1,1 +1,19 @@
-<p>side-panel works!</p>
+<!-- (close) est émis par le navigateur pour toutes les fermetures : bouton, Échap, clic sur le fond -->
+<dialog
+  #dialog
+  class="panneau border-0 p-0 bg-body shadow"
+  [attr.aria-labelledby]="identifiant() + '-titre'"
+  (close)="fermeture.emit()"
+  (click)="fermerSiClicSurLeFond($event)"
+>
+  <div class="d-flex flex-column h-100">
+    <header class="d-flex align-items-center justify-content-between gap-3 px-4 py-3 border-bottom bg-white">
+      <h2 class="h4 mb-0" [id]="identifiant() + '-titre'">{{ titre() }}</h2>
+      <button type="button" class="btn-close" aria-label="Fermer" (click)="fermer()"></button>
+    </header>
+
+    <div class="flex-grow-1 overflow-auto p-4">
+      <ng-content />
+    </div>
+  </div>
+</dialog>

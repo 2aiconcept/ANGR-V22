@@ -1,0 +1,93 @@
+- generic [ref=f11e3]:
+  - banner [ref=f11e5]:
+    - link "liane" [ref=f11e18] [cursor=pointer]:
+      - /url: /entreprises
+      - generic [aria-hidden] [ref=f11e7]: l
+      - generic [ref=f11e8]: liane.
+    - navigation "Navigation principale" [ref=f11e10]:
+      - list [ref=f11e11]:
+        - listitem [ref=f11e12]:
+          - link "Entreprises" [ref=f11e19] [cursor=pointer]:
+            - /url: /entreprises
+        - listitem [ref=f11e14]:
+          - link "Contacts" [ref=f11e20] [cursor=pointer]:
+            - /url: /contacts
+        - listitem [ref=f11e16]:
+          - link "Opportunités" [ref=f11e21] [cursor=pointer]:
+            - /url: /opportunites
+  - main [ref=f11e22]:
+    - generic [ref=f11e25]:
+      - generic [ref=f11e26]:
+        - generic [ref=f11e28]:
+          - paragraph [ref=f11e29]: Portefeuille commercial
+          - heading "Entreprises" [level=1] [ref=f11e30]
+        - button "nouvelle entreprise" [ref=f11e32] [cursor=pointer]: + nouvelle entreprise
+      - generic [ref=f11e33]:
+        - generic [ref=f11e36]:
+          - generic [aria-hidden] [ref=f11e37]: ⌕
+          - generic [ref=f11e38]: Rechercher une entreprise
+          - searchbox "Rechercher une entreprise" [ref=f11e39]
+        - table [ref=f11e41]:
+          - caption [ref=f11e42]: Liste des entreprises
+          - rowgroup [ref=f11e43]:
+            - row [ref=f11e44]:
+              - columnheader "nom" [ref=f11e45]
+              - columnheader "secteur" [ref=f11e46]
+              - columnheader "adresse" [ref=f11e47]
+              - columnheader "telephone" [ref=f11e48]
+              - columnheader "Actions" [ref=f11e49]
+          - rowgroup [ref=f11e51]:
+            - row [ref=f11e52]:
+              - cell "TechVision" [ref=f11e53]:
+                - generic [ref=f11e54]:
+                  - generic [aria-hidden] [ref=f11e56]: T
+                  - generic [ref=f11e57]: TechVision
+              - cell "IT & Cloud" [ref=f11e58]
+              - cell "12 rue de l'Innovation, 75011 Paris" [ref=f11e59]
+              - cell "01 45 67 89 00" [ref=f11e60]
+              - cell [ref=f11e61]:
+                - button "Modifier TechVision" [ref=f11e63] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=f11e64]: TechVision
+            - row [ref=f11e65]:
+              - cell "StratConseil" [ref=f11e66]:
+                - generic [ref=f11e67]:
+                  - generic [aria-hidden] [ref=f11e69]: S
+                  - generic [ref=f11e70]: StratConseil
+              - cell "Conseil" [ref=f11e71]
+              - cell "8 avenue Foch, 69006 Lyon" [ref=f11e72]
+              - cell "04 72 33 45 00" [ref=f11e73]
+              - cell [ref=f11e74]:
+                - button "Modifier StratConseil" [ref=f11e76] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=f11e77]: StratConseil
+            - row [ref=f11e78]:
+              - cell "ShopNow" [ref=f11e79]:
+                - generic [ref=f11e80]:
+                  - generic [aria-hidden] [ref=f11e82]: S
+                  - generic [ref=f11e83]: ShopNow
+              - cell "E-commerce" [ref=f11e84]
+              - cell "25 quai des Chartrons, 33000 Bordeaux" [ref=f11e85]
+              - cell "05 56 12 34 00" [ref=f11e86]
+              - cell [ref=f11e87]:
+                - button "Modifier ShopNow" [ref=f11e89] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=f11e90]: ShopNow
+            - row [ref=f11e91]:
+              - cell "FinFlow" [ref=f11e92]:
+                - generic [ref=f11e93]:
+                  - generic [aria-hidden] [ref=f11e95]: F
+                  - generic [ref=f11e96]: FinFlow
+              - cell "Fintech" [ref=f11e97]
+              - cell "3 place Bellecour, 69002 Lyon" [ref=f11e98]
+              - cell "04 78 90 12 00" [ref=f11e99]
+              - cell [ref=f11e100]:
+                - button "Modifier FinFlow" [ref=f11e102] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=f11e103]: FinFlow
+        - generic [ref=f11e105]:
+          - paragraph [ref=f11e106]: 4 entreprises affichées
+          - navigation "Pagination" [ref=f11e107]:
+            - button "Page 1" [ref=f11e108] [cursor=pointer]:
+              - generic [ref=f11e109]: Page
+              - text: "1"

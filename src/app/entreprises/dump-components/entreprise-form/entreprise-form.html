@@ -1,1 +1,49 @@
-<p>entreprise-form works!</p>
+<form [formRoot]="formulaire" class="d-flex flex-column gap-3">
+  @let nomInvalide = formulaire.nom().touched() && formulaire.nom().invalid();
+
+  <div>
+    <label class="form-label" for="entreprise-nom">Nom <span aria-hidden="true">*</span></label>
+    <input
+      id="entreprise-nom"
+      type="text"
+      class="form-control"
+      [class.is-invalid]="nomInvalide"
+      [attr.aria-invalid]="nomInvalide"
+      aria-describedby="entreprise-nom-erreur"
+      [formField]="formulaire.nom"
+    />
+    <div id="entreprise-nom-erreur" class="invalid-feedback">
+      @for (erreur of formulaire.nom().errors(); track erreur.kind) {
+        {{ erreur.message }}
+      }
+    </div>
+  </div>
+
+  <div>
+    <label class="form-label" for="entreprise-secteur">Secteur</label>
+    <input id="entreprise-secteur" type="text" class="form-control" [formField]="formulaire.secteur" />
+  </div>
+
+  <div>
+    <label class="form-label" for="entreprise-adresse">Adresse</label>
+    <input id="entreprise-adresse" type="text" class="form-control" [formField]="formulaire.adresse" />
+  </div>
+
+  <div>
+    <label class="form-label" for="entreprise-telephone">Téléphone</label>
+    <input
+      id="entreprise-telephone"
+      type="tel"
+      class="form-control"
+      autocomplete="tel"
+      [formField]="formulaire.telephone"
+    />
+  </div>
+
+  <div class="d-flex justify-content-end gap-2 mt-2">
+    <button type="button" class="btn border text-dark" (click)="annuler.emit()">Annuler</button>
+    <button type="submit" class="btn btn-primary" [disabled]="isEnregistrementEnCours()">
+      {{ isEnregistrementEnCours() ? 'Enregistrement…' : 'Enregistrer' }}
+    </button>
+  </div>
+</form>

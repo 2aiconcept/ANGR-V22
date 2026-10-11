@@ -1,0 +1,115 @@
+- generic [ref=f9e3]:
+  - banner [ref=f9e5]:
+    - link "liane" [ref=f9e6] [cursor=pointer]:
+      - /url: /entreprises
+      - generic [aria-hidden] [ref=f9e7]: l
+      - generic [ref=f9e8]: liane.
+    - navigation "Navigation principale" [ref=f9e10]:
+      - list [ref=f9e11]:
+        - listitem [ref=f9e12]:
+          - link "Entreprises" [ref=f9e13] [cursor=pointer]:
+            - /url: /entreprises
+        - listitem [ref=f9e14]:
+          - link "Contacts" [ref=f9e15] [cursor=pointer]:
+            - /url: /contacts
+        - listitem [ref=f9e16]:
+          - link "Opportunités" [ref=f9e17] [cursor=pointer]:
+            - /url: /opportunites
+  - main [ref=f9e18]:
+    - generic [ref=f9e19]:
+      - generic [ref=f9e21]:
+        - generic [ref=f9e22]:
+          - generic [ref=f9e24]:
+            - paragraph [ref=f9e25]: Portefeuille commercial
+            - heading "Entreprises" [level=1] [ref=f9e26]
+          - button "nouvelle entreprise" [ref=f9e28] [cursor=pointer]: + nouvelle entreprise
+        - generic [ref=f9e29]:
+          - generic [ref=f9e32]:
+            - generic [aria-hidden] [ref=f9e33]: ⌕
+            - generic [ref=f9e34]: Rechercher une entreprise
+            - searchbox "Rechercher une entreprise" [ref=f9e35]
+          - table [ref=f9e37]:
+            - caption [ref=f9e38]: Liste des entreprises
+            - rowgroup [ref=f9e39]:
+              - row [ref=f9e40]:
+                - columnheader "nom" [ref=f9e41]
+                - columnheader "secteur" [ref=f9e42]
+                - columnheader "adresse" [ref=f9e43]
+                - columnheader "telephone" [ref=f9e44]
+                - columnheader "Actions" [ref=f9e45]
+            - rowgroup [ref=f9e47]:
+              - row [ref=f9e48]:
+                - cell "TechVision" [ref=f9e49]:
+                  - generic [ref=f9e50]:
+                    - generic [aria-hidden] [ref=f9e52]: T
+                    - generic [ref=f9e53]: TechVision
+                - cell "IT & Cloud" [ref=f9e54]
+                - cell "12 rue de l'Innovation, 75011 Paris" [ref=f9e55]
+                - cell "01 45 67 89 00" [ref=f9e56]
+                - cell [ref=f9e57]:
+                  - button "Modifier TechVision" [ref=f9e59] [cursor=pointer]:
+                    - text: ✎ Modifier
+                    - generic [ref=f9e60]: TechVision
+              - row [ref=f9e61]:
+                - cell "StratConseil" [ref=f9e62]:
+                  - generic [ref=f9e63]:
+                    - generic [aria-hidden] [ref=f9e65]: S
+                    - generic [ref=f9e66]: StratConseil
+                - cell "Conseil" [ref=f9e67]
+                - cell "8 avenue Foch, 69006 Lyon" [ref=f9e68]
+                - cell "04 72 33 45 00" [ref=f9e69]
+                - cell [ref=f9e70]:
+                  - button "Modifier StratConseil" [ref=f9e72] [cursor=pointer]:
+                    - text: ✎ Modifier
+                    - generic [ref=f9e73]: StratConseil
+              - row [ref=f9e74]:
+                - cell "ShopNow" [ref=f9e75]:
+                  - generic [ref=f9e76]:
+                    - generic [aria-hidden] [ref=f9e78]: S
+                    - generic [ref=f9e79]: ShopNow
+                - cell "E-commerce" [ref=f9e80]
+                - cell "25 quai des Chartrons, 33000 Bordeaux" [ref=f9e81]
+                - cell "05 56 12 34 00" [ref=f9e82]
+                - cell [ref=f9e83]:
+                  - button "Modifier ShopNow" [ref=f9e85] [cursor=pointer]:
+                    - text: ✎ Modifier
+                    - generic [ref=f9e86]: ShopNow
+              - row [ref=f9e87]:
+                - cell "FinFlow" [ref=f9e88]:
+                  - generic [ref=f9e89]:
+                    - generic [aria-hidden] [ref=f9e91]: F
+                    - generic [ref=f9e92]: FinFlow
+                - cell "Fintech" [ref=f9e93]
+                - cell "3 place Bellecour, 69002 Lyon" [ref=f9e94]
+                - cell "04 78 90 12 00" [ref=f9e95]
+                - cell [ref=f9e96]:
+                  - button "Modifier FinFlow" [ref=f9e98] [cursor=pointer]:
+                    - text: ✎ Modifier
+                    - generic [ref=f9e99]: FinFlow
+          - generic [ref=f9e101]:
+            - paragraph [ref=f9e102]: 4 entreprises affichées
+            - navigation "Pagination" [ref=f9e103]:
+              - button "Page 1" [ref=f9e104] [cursor=pointer]:
+                - generic [ref=f9e105]: Page
+                - text: "1"
+      - dialog [ref=f9e130]:
+        - generic [ref=f9e131]:
+          - generic [ref=f9e132]:
+            - heading "Modifier l’entreprise" [level=2] [ref=f9e133]
+            - button "Fermer" [active] [ref=f9e134] [cursor=pointer]
+          - generic [ref=f9e137]:
+            - generic [ref=f9e138]:
+              - generic [ref=f9e139]: Nom *
+              - textbox "Nom" [ref=f9e140]: StratConseil
+            - generic [ref=f9e141]:
+              - generic [ref=f9e142]: Secteur
+              - textbox "Secteur" [ref=f9e143]: Conseil
+            - generic [ref=f9e144]:
+              - generic [ref=f9e145]: Adresse
+              - textbox "Adresse" [ref=f9e146]: 8 avenue Foch, 69006 Lyon
+            - generic [ref=f9e147]:
+              - generic [ref=f9e148]: Téléphone
+              - textbox "Téléphone" [ref=f9e149]: 04 72 33 45 00
+            - generic [ref=f9e150]:
+              - button "Annuler" [ref=f9e151] [cursor=pointer]
+              - button "Enregistrer" [ref=f9e152] [cursor=pointer]

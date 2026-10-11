@@ -39,3 +39,24 @@
     (changementPage)="pageCourante.set($event)"
   />
 </app-list-page-layout>
+
+<!-- Hors du layout : le panneau se superpose à toute la page -->
+@if (isPanneauOuvert()) {
+  <app-side-panel
+    identifiant="panneau-entreprise"
+    [titre]="entrepriseAModifier() ? 'Modifier l’entreprise' : 'Nouvelle entreprise'"
+    (fermeture)="fermerPanneau()"
+  >
+    @if (hasErrorEnregistrement()) {
+      <div class="alert alert-danger" role="alert">
+        L'enregistrement a échoué. Vérifiez les informations et réessayez.
+      </div>
+    }
+    <app-entreprise-form
+      [entreprise]="entrepriseAModifier() ?? undefined"
+      [isEnregistrementEnCours]="isEnregistrementEnCours()"
+      (enregistrer)="enregistrer($event)"
+      (annuler)="fermerPanneau()"
+    />
+  </app-side-panel>
+}

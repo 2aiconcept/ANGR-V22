@@ -1,17 +1,28 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ListPageLayout } from '../../../layout/list-page-layout/list-page-layout';
 import { EntreprisesService } from '../../data-access/entreprises-service';
-import { Entreprise } from '../../utils/models/entreprise';
+import { Entreprise, EntrepriseInput } from '../../utils/models/entreprise';
 import { ButtonLarge } from '../../../shared/dump-components/button-large/button-large';
 import { PageTitle } from '../../../shared/dump-components/page-title/page-title';
 import { DataTable } from '../../../shared/dump-components/data-table/data-table';
 import { SearchField } from '../../../shared/dump-components/search-field/search-field';
 import { Paginator } from '../../../shared/dump-components/paginator/paginator';
+import { SidePanel } from '../../../shared/dump-components/side-panel/side-panel';
+import { EntrepriseForm } from '../../dump-components/entreprise-form/entreprise-form';
 
 const TAILLE_PAGE = 10;
 
 @Component({
-  imports: [ListPageLayout, ButtonLarge, PageTitle, DataTable, SearchField, Paginator],
+  imports: [
+    ListPageLayout,
+    ButtonLarge,
+    PageTitle,
+    DataTable,
+    SearchField,
+    Paginator,
+    SidePanel,
+    EntrepriseForm,
+  ],
   selector: 'app-entreprises-page',
   styleUrl: './entreprises-page.scss',
   templateUrl: './entreprises-page.html',
@@ -42,11 +53,48 @@ export class EntreprisesPage {
     return this.entreprises().slice(debut, debut + TAILLE_PAGE);
   });
 
-  addEntreprise() {
-    console.log('add entreprise clicked');
+  // étape 3 : formulaire d'ajout / modification dans le panneau latéral ___________
+  protected readonly isPanneauOuvert = signal(false);
+  // null : création. Une entreprise : modification de celle-ci.
+  protected readonly entrepriseAModifier = signal<Entreprise | null>(null);
+  protected readonly isEnregistrementEnCours = signal(false);
+  protected readonly hasErrorEnregistrement = signal(false);
+
+  protected addEntreprise(): void {
+    this.entrepriseAModifier.set(null);
+    this.ouvrirPanneau();
   }
 
   protected modifierEntreprise(entreprise: Entreprise): void {
-    console.log(entreprise);
+    this.entrepriseAModifier.set(entreprise);
+    this.ouvrirPanneau();
+  }
+
+  protected fermerPanneau(): void {
+    this.isPanneauOuvert.set(false);
+  }
+
+  protected async enregistrer(valeurs: EntrepriseInput): Promise<void> {
+    this.isEnregistrementEnCours.set(true);
+    this.hasErrorEnregistrement.set(false);
+    const entreprise = this.entrepriseAModifier();
+    try {
+      if (entreprise === null) {
+        await this.entreprisesService.ajouter(valeurs);
+      } else {
+        await this.entreprisesService.modifier(entreprise.id, valeurs);
+      }
+      this.fermerPanneau();
+    } catch {
+      // L'API a refusé ou ne répond pas : le panneau reste ouvert, avec un message.
+      this.hasErrorEnregistrement.set(true);
+    } finally {
+      this.isEnregistrementEnCours.set(false);
+    }
+  }
+
+  private ouvrirPanneau(): void {
+    this.hasErrorEnregistrement.set(false);
+    this.isPanneauOuvert.set(true);
   }
 }

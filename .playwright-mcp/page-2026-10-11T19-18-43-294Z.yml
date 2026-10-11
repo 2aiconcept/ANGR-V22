@@ -1,0 +1,14 @@
+- generic [ref=f11e3]:
+  - banner [ref=f11e5]:
+    - generic [ref=f11e6]:
+      - generic [aria-hidden] [ref=f11e7]: l
+      - generic [ref=f11e8]: liane.
+    - navigation "Navigation principale" [ref=f11e10]:
+      - list [ref=f11e11]:
+        - listitem [ref=f11e12]:
+          - generic [ref=f11e13]: Entreprises
+        - listitem [ref=f11e14]:
+          - generic [ref=f11e15]: Contacts
+        - listitem [ref=f11e16]:
+          - generic [ref=f11e17]: Opportunités
+  - main
