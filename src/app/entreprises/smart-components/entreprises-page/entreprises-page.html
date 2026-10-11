@@ -10,10 +10,23 @@
     placeholder="Rechercher une entreprise, un secteur…"
   />
 
-  <app-data-table 
+  <!-- Toujours présent dans la page : le lecteur d'écran annonce le texte quand il apparaît -->
+  <div aria-live="polite">
+    @if (isLoading()) {
+      <p class="px-4 py-3 mb-0 text-body-secondary">Chargement des entreprises…</p>
+    }
+  </div>
+  @if (error()) {
+    <div class="alert alert-danger m-3" role="alert">
+      Impossible de charger les entreprises. Vérifiez votre connexion et rechargez la page.
+    </div>
+  }
+
+  <app-data-table
     legende="Liste des entreprises" 
     [colonnes]="colonnes" 
-    [lignes]="entreprisesDeLaPage()" 
+    [lignes]="entreprisesDeLaPage()"
+    colonneAvatar="nom"
     (modifier)="modifierEntreprise($event)" 
   />
 

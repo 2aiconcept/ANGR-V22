@@ -1,0 +1,46 @@
+- generic [ref=e3]:
+  - banner [ref=e5]:
+    - link "liane" [ref=e6] [cursor=pointer]:
+      - /url: /entreprises
+      - generic [aria-hidden] [ref=e7]: l
+      - generic [ref=e8]: liane.
+    - navigation "Navigation principale" [ref=e10]:
+      - list [ref=e11]:
+        - listitem [ref=e12]:
+          - link "Entreprises" [ref=e13] [cursor=pointer]:
+            - /url: /entreprises
+        - listitem [ref=e14]:
+          - link "Contacts" [ref=e15] [cursor=pointer]:
+            - /url: /contacts
+        - listitem [ref=e16]:
+          - link "Opportunités" [ref=e17] [cursor=pointer]:
+            - /url: /opportunites
+  - main [ref=e18]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e24]:
+          - paragraph [ref=e25]: Portefeuille commercial
+          - heading "Entreprises" [level=1] [ref=e26]
+        - button "nouvelle entreprise" [ref=e28] [cursor=pointer]: + nouvelle entreprise
+      - generic [ref=e29]:
+        - generic [ref=e32]:
+          - generic [aria-hidden] [ref=e33]: ⌕
+          - generic [ref=e34]: Rechercher une entreprise
+          - searchbox "Rechercher une entreprise" [ref=e35]
+        - paragraph [ref=e37]: Chargement des entreprises…
+        - table [ref=e39]:
+          - caption [ref=e40]: Liste des entreprises
+          - rowgroup [ref=e41]:
+            - row [ref=e42]:
+              - columnheader "nom" [ref=e43]
+              - columnheader "secteur" [ref=e44]
+              - columnheader "adresse" [ref=e45]
+              - columnheader "telephone" [ref=e46]
+              - columnheader "Actions" [ref=e47]
+          - rowgroup
+        - generic [ref=e50]:
+          - paragraph [ref=e51]: 0 entreprises affichées
+          - navigation "Pagination" [ref=e52]:
+            - button "Page 1" [ref=e53] [cursor=pointer]:
+              - generic [ref=e54]: Page
+              - text: "1"

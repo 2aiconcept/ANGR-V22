@@ -20,7 +20,16 @@
     @for (ligne of lignes(); track $index) {
       <tr>
         @for (colonne of colonnes(); track colonne) {
-          <td [class.px-4]="$first">{{ ligne[colonne] }}</td>
+          <td [class.px-4]="$first">
+            @if (colonne === colonneAvatar()) {
+              <div class="d-flex align-items-center gap-3">
+                <app-avatar-initials [nom]="ligne[colonne]" />
+                <span class="fw-semibold text-dark">{{ ligne[colonne] }}</span>
+              </div>
+            } @else {
+              {{ ligne[colonne] }}
+            }
+          </td>
         }
         <td class="px-4 text-end">
           <app-button-smal

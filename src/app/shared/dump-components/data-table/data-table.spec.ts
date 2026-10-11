@@ -58,4 +58,21 @@ describe('DataTable', () => {
 
     expect(tableau.querySelector('caption')?.textContent?.trim()).toBe('Liste de test');
   });
+
+  it("n'affiche aucun avatar si colonneAvatar n'est pas renseigné", async () => {
+    const tableau = await afficher();
+
+    expect(tableau.querySelector('app-avatar-initials')).toBeNull();
+  });
+
+  it('affiche un avatar devant la colonne demandée, sur chaque ligne', async () => {
+    const fixture = await creer();
+    fixture.componentRef.setInput('colonneAvatar', 'nom');
+    await fixture.whenStable();
+
+    const avatars = fixture.nativeElement.querySelectorAll('tbody app-avatar-initials');
+
+    expect(avatars.length).toBe(2);
+    expect(avatars[1].textContent.trim()).toBe('B');
+  });
 });

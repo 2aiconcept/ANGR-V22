@@ -1,0 +1,93 @@
+- generic [ref=e3]:
+  - banner [ref=e5]:
+    - link "liane" [ref=e6] [cursor=pointer]:
+      - /url: /entreprises
+      - generic [aria-hidden] [ref=e7]: l
+      - generic [ref=e8]: liane.
+    - navigation "Navigation principale" [ref=e10]:
+      - list [ref=e11]:
+        - listitem [ref=e12]:
+          - link "Entreprises" [ref=e13] [cursor=pointer]:
+            - /url: /entreprises
+        - listitem [ref=e14]:
+          - link "Contacts" [ref=e15] [cursor=pointer]:
+            - /url: /contacts
+        - listitem [ref=e16]:
+          - link "Opportunités" [ref=e17] [cursor=pointer]:
+            - /url: /opportunites
+  - main [ref=e18]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e24]:
+          - paragraph [ref=e25]: Portefeuille commercial
+          - heading "Entreprises" [level=1] [ref=e26]
+        - button "nouvelle entreprise" [ref=e28] [cursor=pointer]: + nouvelle entreprise
+      - generic [ref=e29]:
+        - generic [ref=e32]:
+          - generic [aria-hidden] [ref=e33]: ⌕
+          - generic [ref=e34]: Rechercher une entreprise
+          - searchbox "Rechercher une entreprise" [ref=e35]
+        - table [ref=e39]:
+          - caption [ref=e40]: Liste des entreprises
+          - rowgroup [ref=e41]:
+            - row [ref=e42]:
+              - columnheader "nom" [ref=e43]
+              - columnheader "secteur" [ref=e44]
+              - columnheader "adresse" [ref=e45]
+              - columnheader "telephone" [ref=e46]
+              - columnheader "Actions" [ref=e47]
+          - rowgroup [ref=e55]:
+            - row [ref=e56]:
+              - cell "TechVision" [ref=e57]:
+                - generic [ref=e58]:
+                  - generic [aria-hidden] [ref=e60]: T
+                  - generic [ref=e61]: TechVision
+              - cell "IT & Cloud" [ref=e62]
+              - cell "12 rue de l'Innovation, 75011 Paris" [ref=e63]
+              - cell "01 45 67 89 00" [ref=e64]
+              - cell [ref=e65]:
+                - button "Modifier TechVision" [ref=e67] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=e68]: TechVision
+            - row [ref=e69]:
+              - cell "StratConseil" [ref=e70]:
+                - generic [ref=e71]:
+                  - generic [aria-hidden] [ref=e73]: S
+                  - generic [ref=e74]: StratConseil
+              - cell "Conseil" [ref=e75]
+              - cell "8 avenue Foch, 69006 Lyon" [ref=e76]
+              - cell "04 72 33 45 00" [ref=e77]
+              - cell [ref=e78]:
+                - button "Modifier StratConseil" [ref=e80] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=e81]: StratConseil
+            - row [ref=e82]:
+              - cell "ShopNow" [ref=e83]:
+                - generic [ref=e84]:
+                  - generic [aria-hidden] [ref=e86]: S
+                  - generic [ref=e87]: ShopNow
+              - cell "E-commerce" [ref=e88]
+              - cell "25 quai des Chartrons, 33000 Bordeaux" [ref=e89]
+              - cell "05 56 12 34 00" [ref=e90]
+              - cell [ref=e91]:
+                - button "Modifier ShopNow" [ref=e93] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=e94]: ShopNow
+            - row [ref=e95]:
+              - cell "FinFlow" [ref=e96]:
+                - generic [ref=e97]:
+                  - generic [aria-hidden] [ref=e99]: F
+                  - generic [ref=e100]: FinFlow
+              - cell "Fintech" [ref=e101]
+              - cell "3 place Bellecour, 69002 Lyon" [ref=e102]
+              - cell "04 78 90 12 00" [ref=e103]
+              - cell [ref=e104]:
+                - button "Modifier FinFlow" [ref=e106] [cursor=pointer]:
+                  - text: ✎ Modifier
+                  - generic [ref=e107]: FinFlow
+        - generic [ref=e50]:
+          - paragraph [ref=e51]: 4 entreprises affichées
+          - navigation "Pagination" [ref=e52]:
+            - button "Page 1" [ref=e53] [cursor=pointer]:
+              - generic [ref=e54]: Page
+              - text: "1"
