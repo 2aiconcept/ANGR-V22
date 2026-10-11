@@ -5,3 +5,6 @@ export interface Entreprise {
   adresse?: string;
   telephone?: string;
 }
+
+// Ce qu'on envoie à l'API pour créer ou modifier : tout sauf l'id, attribué par le serveur.
+export type EntrepriseInput = Omit<Entreprise, 'id'>;

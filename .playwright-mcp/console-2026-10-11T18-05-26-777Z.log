@@ -1,3 +1,23 @@
 [     422ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/C:/Users/chris/01-FORMATIONS/ANGR/angr-v22/.angular/cache/22.2.1/angr-v22/vite/deps/core-CABa1ZRZ.js?v=8b1aaf45:12478
 [     533ms] [LOG] pagecourante 1 @ http://localhost:4200/chunk-MF7XMA35.js:665
 [     534ms] [LOG] nb pages 1 @ http://localhost:4200/chunk-MF7XMA35.js:666
+[  531210ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/C:/Users/chris/01-FORMATIONS/ANGR/angr-v22/.angular/cache/22.2.1/angr-v22/vite/deps/core-CABa1ZRZ.js?v=8b1aaf45:12478
+[  531413ms] [LOG] pagecourante 1 @ http://localhost:4200/chunk-DUMB5GEV.js:679
+[  531413ms] [LOG] nb pages 1 @ http://localhost:4200/chunk-DUMB5GEV.js:680
+[  855997ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:4200/@vite/client:1030
+[  930197ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/C:/Users/chris/01-FORMATIONS/ANGR/angr-v22/.angular/cache/22.2.1/angr-v22/vite/deps/core-CABa1ZRZ.js?v=8b1aaf45:12478
+[  930422ms] [LOG] pagecourante 1 @ http://localhost:4200/chunk-DUMB5GEV.js:679
+[  930422ms] [LOG] nb pages 1 @ http://localhost:4200/chunk-DUMB5GEV.js:680
+[ 1308583ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:4200/@vite/client:1030
+[ 2159587ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/C:/Users/chris/01-FORMATIONS/ANGR/angr-v22/.angular/cache/22.2.1/angr-v22/vite/deps/core-CABa1ZRZ.js?v=8b1aaf45:12478
+[ 2159998ms] [LOG] pagecourante 1 @ http://localhost:4200/chunk-DUMB5GEV.js:679
+[ 2159999ms] [LOG] nb pages 1 @ http://localhost:4200/chunk-DUMB5GEV.js:680
+[ 2160097ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://mini-crm-api-production-298d.up.railway.app/api/entreprises:0
+[ 2160306ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:4200/@vite/client:1030
+[ 3578599ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/C:/Users/chris/01-FORMATIONS/ANGR/angr-v22/.angular/cache/22.2.1/angr-v22/vite/deps/core-CABa1ZRZ.js?v=8b1aaf45:12478
+[ 3578779ms] [LOG] pagecourante 1 @ http://localhost:4200/chunk-DUMB5GEV.js:679
+[ 3578779ms] [LOG] nb pages 1 @ http://localhost:4200/chunk-DUMB5GEV.js:680
+[ 4059063ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:4200/@vite/client:1030
+[ 4121467ms] [LOG] Angular is running in development mode. @ http://localhost:4200/@fs/C:/Users/chris/01-FORMATIONS/ANGR/angr-v22/.angular/cache/22.2.1/angr-v22/vite/deps/core-CABa1ZRZ.js?v=8b1aaf45:12478
+[ 4121693ms] [LOG] pagecourante 1 @ http://localhost:4200/chunk-DUMB5GEV.js:679
+[ 4121693ms] [LOG] nb pages 1 @ http://localhost:4200/chunk-DUMB5GEV.js:680
